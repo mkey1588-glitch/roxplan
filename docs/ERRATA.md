@@ -16,7 +16,7 @@ Section references (`§7.1`, `F8.3`) are to `docs/PRD.md`. Decision references (
 
 ## R1 — Plan calendar is race-anchored, with an unstructured lead-in
 
-Amends §7.1, §8 (date semantics). Resolves finding F09.
+Amends §7.1, §8 (date semantics). Resolves the calendar-anchoring ambiguity — the PRD never said whether plan weeks anchor to `startDate` or to race day, nor where the leftover days go. See also F30, a defect found in this amendment itself.
 
 ```
 availableDays = differenceInDays(todayLocal, raceDate) + 1   // inclusive of both ends
@@ -44,7 +44,7 @@ Consequences for the engine:
 
 ## R2 — Guardrail 1 counts every planned running metre; simulation weeks displace other running
 
-Amends F8.1, §7.2, §7.3. Resolves finding F01; supersedes the §7.3 `RUNNER` wording.
+Amends F8.1, §7.2, §7.3. Resolves the collision between §7.2's simulation cadence and F8.1's volume ceiling, and supersedes the §7.3 `RUNNER` wording.
 
 **Weekly running volume** = the sum of **all planned running metres** in the week, including compromised-run segments and race-simulation running. Race-Specific weeks containing a simulation must reduce their other running so the week still fits under the ceiling.
 
@@ -63,7 +63,7 @@ Consequences for the engine:
 
 ## R3 — Onboarding captures current weekly running volume
 
-Amends §F1 step 3, §F2, §8 (`Baseline`). Resolves finding F02.
+Amends §F1 step 3, §F2, §8 (`Baseline`). Resolves F8.1's missing baseline for weeks 1–3 — onboarding captured longest continuous run but never weekly volume.
 
 Add to onboarding: **typical weekly running distance over the last month.** Stored SI as `weeklyRunDistanceM`.
 
@@ -73,7 +73,7 @@ Add to onboarding: **typical weekly running distance over the last month.** Stor
 
 ## R4 — Absorption is render-layer only; `Plan` is never regenerated for adherence
 
-Amends §F7, §8. Resolves finding F10; folds in F16 and F22.
+Amends §F7, §8. Resolves the contradiction between §F7's "recalculate forward" and §8's claim that `Plan` is regenerable from `(inputs, engineVersion)`. Folds in F22, and the risk that an auto-regulated deload lands adjacent to the taper — recreating the exact bug F8.3 was written to prevent.
 
 ```
 Plan (immutable, inputsHash stable)
@@ -138,8 +138,8 @@ Sled figures are total mass **including the sled itself**, as the rulebook state
 
 | # | Finding | Proposed resolution |
 |---|---|---|
-| **F08** | **The 6-day weekly template is arithmetically broken and violates F8.4.** §7.4's "3 run, 2 strength, 1 hybrid + 1 recovery" is **7 sessions**, leaving no day for the mandatory full REST day in a 7-day week. | Six counted sessions (3 run, 2 strength, 1 hybrid) + 1 REST. `RECOVERY_MOBILITY` becomes an optional unscheduled add-on, not a counted day. **Wants a second opinion.** |
-| **F09** | **The `RUNNER` modifier overflows the week.** §7.3's "+1 strength session/week in Foundation" is additive on top of the template, so a 5-day RUNNER gets 6 sessions and a 6-day RUNNER gets 7–8 — exceeding the athlete's stated availability and destroying the rest day. | Make the modifier **substitutive**: swap a run for a strength session rather than adding one. **Wants a second opinion.** |
+| **F08** | ~~**The 6-day weekly template is arithmetically broken and violates F8.4.** §7.4's "3 run, 2 strength, 1 hybrid + 1 recovery" is **7 sessions**, leaving no day for the mandatory full REST day in a 7-day week.~~ | **RESOLVED — approved 2026-08-05.** Six counted sessions (3 run, 2 strength, 1 hybrid) + 1 REST. `RECOVERY_MOBILITY` stays in the session-type enum for auto-regulation to downgrade into, but is never a scheduled training day. `lib/engine/templates.ts`. |
+| **F09** | ~~**The `RUNNER` modifier overflows the week.** §7.3's "+1 strength session/week in Foundation" is additive on top of the template, so a 5-day RUNNER gets 6 sessions and a 6-day RUNNER gets 7–8 — exceeding the athlete's stated availability and destroying the rest day.~~ | **RESOLVED — approved 2026-08-05.** Substitutive: a run becomes a strength session, so the week never exceeds stated availability and the rest day survives. A deliberate no-op at 2 and 3 days/week, where only one run exists to trade. `lib/engine/templates.ts`. |
 | **F10** | **§7.3 contradicts §7.7.** `STRENGTH` background: "compromised running introduced one week earlier" — earlier than Build week 1 is Foundation, where §7.7 says compromised running is "not prescribed". | Introduce it in the final Foundation week for `STRENGTH` only, and amend §7.7's Foundation row to say so. |
 | **F11** | **§7.1 is not fully deterministic as written.** `largestRemainderRound` has no tie-break rule and ties genuinely occur: `weeksToRace` = **11, 31, 51** each produce an exact 0.5/0.5 tie between Build and Race-Specific (w=11 → floors 4/3/2, one week to distribute). Compounded by float arithmetic: `0.35 × r` yields values like `4.19999…`. | Integer math (scale by 100) plus a documented tie-break priority: **`raceSpec > build > foundation`**. Test w=11/31/51 explicitly. |
 | **F12** | **`fallbackSessionId` has no valid home in the schema.** §8's `Session` requires a `dayOffset`, so a fallback session either double-books the gated session's day or breaks the model — and it collides with `sessionKey`. | Fallbacks are unscheduled variants: nullable `dayOffset`, or inline `fallbackBlocks` on the gated session. |
@@ -175,4 +175,5 @@ Sled figures are total mass **including the sled itself**, as the rulebook state
 
 | # | Sev | Finding | Resolution |
 |---|---|---|---|
+| **F31** | P1 | **The weekly template repeats identically, so day 6 and day 0 are always adjacent across the week boundary — and can be the same kind.** At 4 sessions/week the slots are `RUN _ STRENGTH _ HYBRID _ RUN`, so every week ends and the next begins with a run. At 6 sessions/week the same happens, though there it is partly inherent: six training days in seven leaves only one gap. Within a week the scheduler never repeats a kind on consecutive days (tested), but it does not currently look across the boundary. This matters most for **BEGINNER at 6 days/week** — the exact adversarial case in the step-6 guardrail list — where §7.4 says "never two consecutive high-intensity days". | **Deferred, not fixed.** The fix depends on F17: until the high-intensity session set is defined, "same kind on consecutive days" and "two consecutive high-intensity days" are different constraints and a scheduler change could satisfy one while breaching the other. Two candidate fixes: rotate the slot sequence by week, or forbid the first and last slot sharing a kind. **The step-6 guardrail pass must evaluate consecutive-day rules across week boundaries, not only within a week.** |
 | **F30** | P1 | **R1's own week formula was off by one against its own stated leftover range.** `weeksToRace = floor(daysUntilRace / 7)` over an exclusive day difference yields a leftover of 1–7 days, not the 0–6 R1 states one line later. The practical cost is a discarded training week: a race 13 days out leaves 14 usable days — two whole weeks — but the exclusive form gives a 1-week plan with a 7-day lead-in. | **RESOLVED.** Count `availableDays` inclusively (`differenceInDays + 1`). R1's code block is corrected above. `lib/engine/calendar.test.ts` asserts the 0–6 lead-in range and the "never discard a usable week" property across every horizon from 0 to 400 days. |

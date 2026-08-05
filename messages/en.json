@@ -2,5 +2,10 @@
   "app": {
     "name": "RoxPlan",
     "tagline": "Periodized HYROX training that adapts to you, and won't let you overreach."
+  },
+  "plan": {
+    "note": {
+      "twoDayWeek": "Two sessions a week will build real race readiness. If you can find a third, it's the single biggest step up for a first race — but this plan works as it is."
+    }
   }
 }
