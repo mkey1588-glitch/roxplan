@@ -208,6 +208,29 @@ export function selectStations(
 }
 
 /**
+ * Rough hybrid running for the week, used only to size the run/strength split.
+ *
+ * Deliberately an estimate: the exact figure depends on which day each hybrid
+ * lands on, which is not known until the week is scheduled. Being a little
+ * out only shifts the split by a session, and guardrail 5 and the volume
+ * ceiling are both validated independently afterwards.
+ */
+function estimateHybridMetres({
+  hybridCount,
+  compromised,
+  canSimulate,
+}: {
+  hybridCount: number;
+  compromised: { rounds: number; runDistanceM: number } | null;
+  canSimulate: boolean;
+}): number {
+  if (hybridCount <= 0) return 0;
+  if (canSimulate) return SIMULATION_RUNNING_M;
+  if (compromised === null) return 0;
+  return hybridCount * compromised.rounds * compromised.runDistanceM;
+}
+
+/**
  * A compact strength block appended to a hybrid session (ERRATA R8).
  *
  * Shorter than a standalone strength day — it follows other work rather than
@@ -323,7 +346,21 @@ export function prescribeWeek(input: WeekPrescriptionInput): readonly PlannedSes
   const weekInPhase = weekIndex - span.startWeek + 1;
   const weeksInPhase = span.endWeek - span.startWeek + 1;
 
-  const template = templateFor(sessionsPerWeek, phase, background);
+  // Two passes. The number of hybrid slots does not change when strength days
+  // convert to run days, so a provisional template is enough to work out how
+  // much running the hybrids will consume — and therefore how much the run
+  // slots must carry.
+  const provisional = templateFor(sessionsPerWeek, phase, background);
+  const provisionalHybridMetres = estimateHybridMetres({
+    hybridCount: provisional.composition.hybrid,
+    compromised: compromisedRunFor({ phase, weekInPhase, weeksInPhase, background }),
+    canSimulate: phase === 'RACE_SPECIFIC' && volume.runningBudgetM >= SIMULATION_RUNNING_M,
+  });
+
+  const template = templateFor(sessionsPerWeek, phase, background, {
+    requiredRunM: Math.max(0, volume.runningBudgetM - provisionalHybridMetres),
+    maxSingleRunM,
+  });
 
   /**
    * At 2 and 3 sessions a week there is no room for a standalone strength day

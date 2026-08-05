@@ -56,6 +56,22 @@ export const MIN_REST_DAYS_PER_WEEK = 1;
 /** PRD §7.3: `STRENGTH` backgrounds cap heavy lifting at 2 sessions a week. */
 const STRENGTH_BACKGROUND_LIFT_CAP = 2;
 
+/**
+ * How much running the week's run slots have to absorb.
+ *
+ * Passed to {@link compositionFor} so the run/strength split can respond to
+ * the athlete in front of it. Without this the split is a fixed table, and a
+ * 45km/week runner with two run slots and a 16km single-run ceiling simply
+ * loses the other 13km — the plan quietly prescribes less than they already
+ * do (ERRATA F35).
+ */
+export interface RunCapacityNeed {
+  /** Metres the run slots must carry: the week's budget minus hybrid running. */
+  readonly requiredRunM: number;
+  /** Longest single run this athlete may be prescribed. */
+  readonly maxSingleRunM: number;
+}
+
 export interface WeeklyComposition {
   readonly run: number;
   readonly strength: number;
@@ -135,6 +151,7 @@ export function compositionFor(
   sessionsPerWeek: number,
   phase: PhaseType,
   background: AthleticBackground,
+  need?: RunCapacityNeed,
 ): WeeklyComposition {
   assertValidSessionsPerWeek(sessionsPerWeek);
 
@@ -173,6 +190,19 @@ export function compositionFor(
     const excess = strength - STRENGTH_BACKGROUND_LIFT_CAP;
     strength -= excess;
     run += excess;
+  }
+
+  // **ERRATA F35 / R9.** If the run slots cannot hold the running this athlete
+  // is due, convert strength days into run days until they can. The volume
+  // ceiling is a safety limit on how fast load may *grow*; it was never meant
+  // to cap an athlete below what they already do, which is what a fixed
+  // run/strength split silently did. Strength is not lost when it reaches
+  // zero — it folds into the hybrid session (R8).
+  if (need !== undefined && need.maxSingleRunM > 0) {
+    while (strength > 0 && run * need.maxSingleRunM < need.requiredRunM) {
+      strength -= 1;
+      run += 1;
+    }
   }
 
   const rest = DAYS_PER_WEEK - (run + strength + hybrid);
@@ -271,8 +301,9 @@ export function templateFor(
   sessionsPerWeek: number,
   phase: PhaseType,
   background: AthleticBackground,
+  need?: RunCapacityNeed,
 ): WeeklyTemplate {
-  const composition = compositionFor(sessionsPerWeek, phase, background);
+  const composition = compositionFor(sessionsPerWeek, phase, background, need);
   const slots = scheduleWeek(composition);
 
   const noteKeys: string[] = [];

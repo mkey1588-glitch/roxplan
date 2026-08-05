@@ -8,7 +8,7 @@ Two parts:
 - **Part 1 — Amendments (R1–R6).** Decided, authoritative. Where these differ from PRD v0.2, **this document wins.** Fold into PRD v0.3 when convenient.
 - **Part 2 — Findings register (F04–F34).** Defects found against v0.2, plus those found during implementation. Resolved entries are struck through and say what resolved them; the rest carry a proposed resolution. Severity: **P0** = produces a wrong or unbuildable engine; **P1** = will need rework; **P2** = tidy-up.
 
-**Still wanting your input:** F35 (high-volume athletes under-prescribed — session slots × the capability cap bounds the week), F32 (race-pace formula is an unvalidated modelling assumption), F17 (confirm the high-intensity session set, implemented provisionally as `INTERVAL_RUN`, `COMPROMISED_RUN`, `RACE_SIMULATION`), F19 (what to do when the PFT recommends Doubles), F34 (whether low-volume athletes should get a scaled 'near-full' simulation rather than none).
+**Still wanting your input:** F32 (race-pace formula is an unvalidated modelling assumption), F17 (confirm the high-intensity session set, implemented provisionally as `INTERVAL_RUN`, `COMPROMISED_RUN`, `RACE_SIMULATION`), F19 (what to do when the PFT recommends Doubles), F34 (whether low-volume athletes should get a scaled 'near-full' simulation rather than none).
 
 Section references (`§7.1`, `F8.3`) are to `docs/PRD.md`. Decision references (`D9`) are to `docs/DECISIONS.md`.
 
@@ -150,6 +150,24 @@ The 3-day row becomes **2 run + 1 hybrid**, replacing the PRD's 1 run / 1 streng
 
 Unchanged at 2 sessions a week: there is no room for a second run, and D6's note already tells that athlete three days would serve them better.
 
+## R9 — The run/strength split is derived from required capacity, not a fixed table
+
+Amends §7.4. Resolves F35. Approved 2026-08-06.
+
+§7.4's weekly composition was a lookup by `sessionsPerWeek` alone. That silently capped athletes below what they already do: a 45 km/week runner at 5 sessions got 2 run slots, and with a 16.3 km single-run ceiling the week could hold only 32.6 km. The other 13 km had nowhere to go.
+
+**The volume ceiling is a limit on how fast load may grow. It was never meant to cap an athlete below their current training** — that reading makes the plan a downgrade for anyone reasonably fit.
+
+`compositionFor` now takes an optional `RunCapacityNeed` and converts strength days into run days until the run slots can carry the week's running. Strength is not lost when it reaches zero: it folds into the hybrid session via R8's accessory block.
+
+| Profile | Before | After |
+|---|---|---|
+| RUNNER, 45 km/wk, 5 days | 2 runs, 32.6 km | **3 runs of 15 km, 45.0 km** |
+| BEGINNER, 8 km/wk, 3 days | unchanged | unchanged |
+| BEGINNER, 3 km/wk, 4 days | unchanged | unchanged |
+
+Sizing happens in two passes, because the run/strength split depends on how much running the hybrids consume, which depends on the template. The hybrid *count* is invariant under the conversion, so a provisional template settles the hybrid metres and the final one settles the split. The hybrid estimate is deliberately approximate — being a session out only shifts the split, and guardrail 5 and the volume ceiling are both validated independently afterwards.
+
 ---
 
 # Part 2 — Findings register
@@ -210,7 +228,7 @@ Unchanged at 2 sessions a week: there is no room for a second run, and D6's note
 | # | Sev | Finding | Resolution |
 |---|---|---|---|
 | **F34** | P1 | **A full race simulation can exceed a low-volume athlete's entire weekly running budget.** A simulation is 8km of running on its own. An athlete whose Race-Specific budget is below that — a beginner who started around 4km/week, say — would breach guardrail 1 from the simulation alone, with nothing left to displace. | **Handled conservatively:** the simulation is skipped when the week's budget cannot cover it, and the hybrid stays a compromised run. Their gate and fallback still deliver transition practice. **Better fix deferred:** §7.2 says "full *or near-full* simulations", so a scaled rehearsal (4 stations + 4km) would serve these athletes better than none. Worth revisiting at the step-7 snapshot review. |
-| **F35** | **P1 — wants a coach's eye** | **The single-run ceiling now caps weekly volume for high-volume athletes.** Session length is bounded by demonstrated capability (longest run × 1.2), so an athlete's week can only hold `runSlots × thatCap`. The 45 km/week runner in profile 2 is prescribed 32.6 km, because 5 sessions leaves only 2 run slots. Under-prescribing is the safe direction, but it is under-prescribing. | Options: allow more run slots for high-volume athletes, permit two runs in a day (research supports separating sessions by hours), or accept that stated availability caps volume. **Needs a methodology decision.** |
+| **F35** | ~~**The single-run ceiling now caps weekly volume for high-volume athletes.** Session length is bounded by demonstrated capability (longest run × 1.2), so an athlete's week can only hold `runSlots × thatCap`. The 45 km/week runner in profile 2 is prescribed 32.6 km, because 5 sessions leaves only 2 run slots. Under-prescribing is the safe direction, but it is under-prescribing.~~ | **RESOLVED by R9 — approved 2026-08-06.** The run/strength split is derived from required capacity: strength days convert to run days until the running fits, with strength folding into the hybrid. The 45 km runner now gets 3 × 15 km and their full volume. |
 | **F36** | ~~**A 3-day athlete gets one run a week** in an event that is more than half running. §7.4's 3-day row is 1 run / 1 strength / 1 hybrid, and in Foundation the hybrid carries no running at all — so a beginner runs once a week for eight weeks. Profile 1 peaks around 5.5 km against a race that demands 8 km.~~ | **RESOLVED by R8 — approved 2026-08-06.** 3-day row is now 2 run + 1 hybrid, with strength folded into the hybrid as an accessory block. Also lifted the beginner's peak from ~5.5 to 11.9 km/week. |
 | **F32** | **P1 — wants a coach's eye** | **Race-pace estimation is a modelling assumption with no source.** §7.8 says goal race pace is "estimated from 5km time if provided" but gives no formula, and `research.md` establishes only that coaches use a recent 5–10km trial and that the race demands threshold-adjacent effort for 60–90+ minutes. I implemented `racePace = fiveKPace × 1.15`, chosen so a 25-minute 5k athlete is prescribed ~5:45/km against the ~6:22/km average the lab study reports for an ~86-minute finish. The per-zone multipliers (easy 1.25, Zone 2 1.15, threshold 1.0, hard 0.92) are the same kind of assumption. | **Implemented but unvalidated.** Isolated in named constants in `lib/engine/progression/running.ts` so it is one edit to change. Deliberately errs slow: a pace slightly too easy costs a little time, one too hard is how a first-timer blows up at the sled. **Needs review at the step-7 snapshot read.** |
 | **F33** | P2 | **Two §7.7 prescriptions are ranges, which is non-deterministic.** "Build wk 3+: ×3–4 rounds" does not say which, and Taper is given only as "1 short session, reduced volume, race pace only". | **RESOLVED.** Build week 3 gets 3 rounds and week 4+ gets 4, so volume still progresses rather than sitting at an arbitrary point in the range. Taper is 2 rounds at race distance — 50% of the Race-Specific load, the upper end of §7.2's "volume cut 40–50%", asserted as such in the tests. |

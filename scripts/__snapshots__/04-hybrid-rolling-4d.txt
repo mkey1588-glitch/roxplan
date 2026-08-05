@@ -10,44 +10,44 @@ Guardrails: PASS
 NOTE: equipment is not yet an engine input. Station substitution (§F5) is a
 render-time concern and arrives with the UI, so these plans assume full access.
 
-WEEK  1  FOUNDATION     running  17.1 km   4 sessions
+WEEK  1  FOUNDATION     running  20.0 km   4 sessions
 ------------------------------------------------------------------------------------------------
-   Wed 05 Aug   Easy run                8.6 km @ zone 2 (RPE 5-6)
+   Wed 05 Aug   Easy run                6.7 km @ zone 2 (RPE 5-6)
    Thu 06 Aug   Rest day                
-   Fri 07 Aug   Strength — upper body   10 min  ·  4 × 8 — Push pattern, Pull pattern, Loaded carry  ·  5 min
+   Fri 07 Aug   Station skills          3 rounds — Sled Push, Sled Pull, Burpee Broad Jump, Sandbag Lunges  ·  3 × 8 — Pull pattern, Loaded carry
    Sat 08 Aug   Rest day                
-   Sun 09 Aug   Station skills          3 rounds — Sled Push, Sled Pull, Burpee Broad Jump, Sandbag Lunges
+   Sun 09 Aug   Easy run                6.7 km @ zone 2 (RPE 5-6)
    Mon 10 Aug   Rest day                
-   Tue 11 Aug   Long run                8.6 km @ zone 2 (RPE 5-6)
+   Tue 11 Aug   Long run                6.7 km @ zone 2 (RPE 5-6)
 
-WEEK  2  FOUNDATION     running  18.5 km   4 sessions
+WEEK  2  FOUNDATION     running  21.6 km   4 sessions
 ------------------------------------------------------------------------------------------------
-   Wed 12 Aug   Easy run                9.3 km @ zone 2 (RPE 5-6)
+   Wed 12 Aug   Easy run                7.2 km @ zone 2 (RPE 5-6)
    Thu 13 Aug   Rest day                
-   Fri 14 Aug   Strength — lower body   10 min  ·  4 × 8 — Squat pattern, Hinge pattern, Lunge pattern  ·  5 min
+   Fri 14 Aug   Station skills          3 rounds — Sled Pull, Burpee Broad Jump, Sandbag Lunges, Wall Balls  ·  3 × 8 — Squat pattern, Hinge pattern
    Sat 15 Aug   Rest day                
-   Sun 16 Aug   Station skills          3 rounds — Sled Pull, Burpee Broad Jump, Sandbag Lunges, Wall Balls
+   Sun 16 Aug   Easy run                7.2 km @ zone 2 (RPE 5-6)
    Mon 17 Aug   Rest day                
-   Tue 18 Aug   Long run                9.3 km @ zone 2 (RPE 5-6)
+   Tue 18 Aug   Long run                7.2 km @ zone 2 (RPE 5-6)
 
-WEEK  3  BUILD          running  20.4 km   4 sessions
+WEEK  3  BUILD          running  22.9 km   4 sessions
 ------------------------------------------------------------------------------------------------
-   Wed 19 Aug   Easy run                9.6 km @ zone 2 (RPE 5-6)
+   Wed 19 Aug   Easy run                7.2 km @ zone 2 (RPE 5-6)
    Thu 20 Aug   Rest day                
-   Fri 21 Aug   Strength — upper body   10 min  ·  4 × 8 — Push pattern, Pull pattern, Loaded carry  ·  5 min
+   Fri 21 Aug   Compromised run         3 rounds: 1 station → 0.4 km @ threshold (RPE 7-8)  ·  3 × 8 — Pull pattern, Loaded carry
    Sat 22 Aug   Rest day                
-   Sun 23 Aug   Compromised run         3 rounds: 1 station → 0.4 km @ threshold (RPE 7-8)
+   Sun 23 Aug   Easy run                7.2 km @ zone 2 (RPE 5-6)
    Mon 24 Aug   Rest day                
-   Tue 25 Aug   Long run                9.6 km @ zone 2 (RPE 5-6)
+   Tue 25 Aug   Long run                7.2 km @ zone 2 (RPE 5-6)
 
-WEEK  4  BUILD          running  12.2 km   4 sessions  ⟨deload⟩
+WEEK  4  BUILD          running  13.7 km   4 sessions  ⟨deload⟩
 ------------------------------------------------------------------------------------------------
-   Wed 26 Aug   Easy run                5.5 km @ zone 2 (RPE 5-6)
+   Wed 26 Aug   Easy run                6.3 km @ zone 2 (RPE 5-6)
    Thu 27 Aug   Rest day                
    Fri 28 Aug   Strength — lower body   10 min  ·  4 × 8 — Squat pattern, Hinge pattern, Lunge pattern  ·  5 min
    Sat 29 Aug   Rest day                
    Sun 30 Aug   Compromised run         3 rounds: 1 station → 0.4 km @ threshold (RPE 7-8)
    Mon 31 Aug   Rest day                
-   Tue 01 Sep   Long run                5.5 km @ zone 2 (RPE 5-6)
+   Tue 01 Sep   Long run                6.3 km @ zone 2 (RPE 5-6)
 
-TOTAL RUNNING ACROSS PLAN: 68.2 km
+TOTAL RUNNING ACROSS PLAN: 78.2 km
