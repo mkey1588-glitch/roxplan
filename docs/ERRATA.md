@@ -19,11 +19,19 @@ Section references (`§7.1`, `F8.3`) are to `docs/PRD.md`. Decision references (
 Amends §7.1, §8 (date semantics). Resolves finding F09.
 
 ```
-weeksToRace = floor(daysUntilRace / 7)
-startDate   = raceDate - (7 * weeksToRace) + 1
-raceDate    = startDate + (7 * weeksToRace) - 1    // race day = final day of the taper week
-week N      = dayOffset [7(N-1) .. 7N-1]           // every plan week is exactly 7 days
+availableDays = differenceInDays(todayLocal, raceDate) + 1   // inclusive of both ends
+weeksToRace   = floor(availableDays / 7)
+leadInDays    = availableDays - (7 * weeksToRace)            // 0-6
+startDate     = raceDate - (7 * weeksToRace) + 1
+raceDate      = startDate + (7 * weeksToRace) - 1   // race day = final day of the taper week
+week N        = dayOffset [7(N-1) .. 7N-1]          // every plan week is exactly 7 days
 ```
+
+> **Corrected 2026-08-05 (see F30).** This block originally read
+> `weeksToRace = floor(daysUntilRace / 7)` over an *exclusive* day difference,
+> which contradicts R1's own "leftover 0–6 days" — it yields 1–7 — and
+> silently discards a usable training week. Counting inclusively is the
+> reading that makes the stated leftover range true.
 
 The leftover 0–6 days between today and `startDate` are an **unstructured lead-in**: no prescriptions, not a week 0, outside the plan, and carrying no guardrail obligations.
 
@@ -162,3 +170,9 @@ Sled figures are total mass **including the sled itself**, as the rulebook state
 | **F27** | Undefined edge inputs: race date today or in the past (`weeksToRace ≤ 0`); `availableDays.length < sessionsPerWeek`. | Explicit handling and error types for both. |
 | **F28** | §7.3 `RUNNER`: "station-strength work introduced earlier" — earlier than what? §7.2 already puts light-load station work in Foundation. As written it is a no-op. | Either delete the line or make it concrete. |
 | **F29** | Repo had no git history and no `.gitignore`. | Done in this commit. |
+
+## Found during implementation
+
+| # | Sev | Finding | Resolution |
+|---|---|---|---|
+| **F30** | P1 | **R1's own week formula was off by one against its own stated leftover range.** `weeksToRace = floor(daysUntilRace / 7)` over an exclusive day difference yields a leftover of 1–7 days, not the 0–6 R1 states one line later. The practical cost is a discarded training week: a race 13 days out leaves 14 usable days — two whole weeks — but the exclusive form gives a 1-week plan with a 7-day lead-in. | **RESOLVED.** Count `availableDays` inclusively (`differenceInDays + 1`). R1's code block is corrected above. `lib/engine/calendar.test.ts` asserts the 0–6 lead-in range and the "never discard a usable week" property across every horizon from 0 to 400 days. |
