@@ -1,0 +1,9 @@
+# pnpm settings live here from pnpm 10 onwards, not in package.json.
+#
+# These three ship native binaries and need their install scripts to run:
+# @swc/core is Next's compiler, unrs-resolver backs ESLint's import
+# resolution, and @parcel/watcher is Next's file watcher in dev.
+allowBuilds:
+  '@parcel/watcher': true
+  '@swc/core': true
+  unrs-resolver: true
