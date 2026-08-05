@@ -184,16 +184,6 @@ function checkSessionCountRamp(plan: ValidatablePlan): GuardrailViolation[] {
 
 // --- Rule 3: deload cadence and suppression ---
 
-function simulationMetresIn(week: readonly PlannedSession[]): number {
-  let total = 0;
-  for (const session of week) {
-    for (const block of session.blocks) {
-      if (block.prescription.kind === 'SIMULATION') total += block.prescription.runDistanceM;
-    }
-  }
-  return total;
-}
-
 function checkDeloadCadence(plan: ValidatablePlan): GuardrailViolation[] {
   const violations: GuardrailViolation[] = [];
   const totalWeeks = plan.sessionsByWeek.length;

@@ -82,5 +82,60 @@
     "gateWithoutFallback": "A session that unlocks with progress has no valid alternative to serve in the meantime.",
     "insufficientRunwayRouting": "There isn't enough time before this race for a full training plan; a readiness plan should be used instead.",
     "beginnerConsecutiveIntensity": "Two hard sessions have landed on consecutive days."
+  },
+  "ui": {
+    "onboarding": {
+      "title": "Build your HYROX plan",
+      "subtitle": "Six questions. The plan adapts to what you tell us, and won't let you ramp up faster than is safe.",
+      "raceDate": "When's your race?",
+      "raceDateHelp": "Leave blank if you haven't booked one yet — you'll get a rolling 4-week block instead.",
+      "noRaceDate": "No race booked yet",
+      "division": "Division",
+      "background": "Where are you coming from?",
+      "backgroundHelp": "This matters more than your fitness level for shaping the first few weeks.",
+      "backgroundRunner": "Runner — comfortable at 10km+",
+      "backgroundStrength": "Strength / CrossFit — I lift regularly",
+      "backgroundHybrid": "A bit of both",
+      "backgroundBeginner": "Starting out — no structured training",
+      "sessionsPerWeek": "Days a week you can train",
+      "weeklyRun": "Roughly how far do you run in a typical week?",
+      "weeklyRunHelp": "Over the last month. Be honest — this sets your safe starting load.",
+      "longestRun": "Longest run in the last month",
+      "longestRunHelp": "In minutes, without stopping.",
+      "weakest": "Which stations worry you most?",
+      "weakestHelp": "Optional. We'll bias your station work toward these.",
+      "submit": "Build my plan",
+      "km": "km",
+      "minutes": "minutes",
+      "days": "days"
+    },
+    "plan": {
+      "backToStart": "Start again",
+      "week": "Week",
+      "of": "of",
+      "raceDay": "Race day",
+      "running": "running",
+      "sessions": "sessions",
+      "deload": "Recovery week",
+      "restDay": "Rest",
+      "today": "Today",
+      "leadIn": "{days} unstructured day(s) before your plan starts — nothing scheduled.",
+      "whyThis": "Why this session",
+      "lockedUntil": "Unlocks when you can run {value} minutes without stopping. Until then you'll get an easy run of the same length.",
+      "lockedUntilRuns": "Unlocks after {value} compromised runs. Until then you'll get another compromised run.",
+      "guardrailsPass": "All safety checks passed",
+      "guardrailsFail": "{count} safety check(s) failed — this is a bug, please report it",
+      "phaseFoundation": "Foundation",
+      "phaseBuild": "Build",
+      "phaseRaceSpecific": "Race-specific",
+      "phaseTaper": "Taper",
+      "totalRunning": "Total running across the plan",
+      "equipmentNote": "Equipment-based substitutions aren't wired up yet — these sessions assume full gym access."
+    },
+    "readiness": {
+      "heading": "There isn't enough time before this race",
+      "sessionsHeading": "What to do between now and race day",
+      "prohibitionsHeading": "What this plan deliberately won't do"
+    }
   }
 }
