@@ -27,18 +27,14 @@ import type { Division, StationId } from '@/lib/seeds/types';
 export const dynamic = 'force-dynamic';
 
 /**
- * Run this route in Tokyo rather than Vercel's US-East default.
+ * Execution region is set in `vercel.json` (`regions: ["hnd1"]`), not here.
  *
- * The plan is generated per request, so before this every page view crossed
- * the Pacific twice: requests entered the network at the Osaka edge and then
- * executed in iad1, measured at 0.56-1.30s TTFB from Japan. The engine is a
- * pure function with no data dependencies, so there is nothing tying
- * execution to a region — it may as well run next to the reader.
- *
- * Revisit when the database lands: the function should sit beside Postgres,
- * and that becomes the constraint rather than this line.
+ * Next's `preferredRegion` route-segment config is deprecated, and on a Hobby
+ * plan the function region is a project-level setting anyway — the per-route
+ * hint was silently ignored, leaving the function in US-East while the edge
+ * sat in Tokyo. Measured, not assumed: `x-vercel-id` reported `hnd1::iad1`
+ * until the change moved it to `hnd1::hnd1`.
  */
-export const preferredRegion = ['hnd1'];
 
 const WEEKDAYS = ['', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 const MONTHS = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
