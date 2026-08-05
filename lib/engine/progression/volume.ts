@@ -42,6 +42,17 @@ export const TAPER_VOLUME_FACTOR = 0.55;
 export const LOW_CONFIDENCE_FACTOR = 0.85;
 
 /**
+ * Headroom kept below the ceiling, so the plan never grows *to* the limit.
+ *
+ * A `RUNNER` in Foundation would otherwise grow at exactly their 1.05 cap,
+ * leaving zero slack — and because the validator re-derives volume from the
+ * emitted sessions, integer rounding makes measured metres a hair under the
+ * budget, which tightens the next week's ceiling just enough to breach it.
+ * Planning to the exact edge of a safety rule is the wrong habit anyway.
+ */
+export const CEILING_SAFETY_MARGIN = 0.01;
+
+/**
  * Week-on-week growth by phase, all strictly below the ceiling multiplier.
  *
  * Race-Specific holds rather than grows: the load there comes from
@@ -151,7 +162,7 @@ export function planWeeklyVolume(input: VolumePlanInput): readonly WeeklyVolume[
       // satisfied "by construction" if the construction actually respects it.
       const growth = deload
         ? DELOAD_VOLUME_FACTOR
-        : Math.min(PHASE_GROWTH[phase], ceilingFactor);
+        : Math.min(PHASE_GROWTH[phase], ceilingFactor - CEILING_SAFETY_MARGIN);
       budgetM = max * growth;
     }
 

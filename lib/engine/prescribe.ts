@@ -3,7 +3,7 @@ import type { StationId } from '@/lib/seeds/types';
 import { dayOffsetsForWeek } from './calendar';
 import type { Gate } from './gates';
 import { BEGINNER_INTERVAL_UNLOCK_MINUTES } from './gates';
-import { compromisedRunFor, compromisedRunningMetres } from './progression/compromised';
+import { compromisedRunFor } from './progression/compromised';
 import type { IntensityZone } from './progression/running';
 import { BASE_ZONE, zoneSpec } from './progression/running';
 import type { WeeklyVolume } from './progression/volume';
@@ -232,9 +232,14 @@ function runBlocks(
 
   if (type === 'INTERVAL_RUN') {
     // 1km repeats at threshold: the §7.8 pattern, and the closest thing in
-    // training to a race run segment.
+    // training to a race run segment. `distanceM` is the session total, so
+    // whatever is not repeats becomes warm-up and cool-down.
+    const easyM = Math.max(0, distanceM - reps * 1000);
+    const warmupM = Math.floor(easyM / 2);
+    const cooldownM = easyM - warmupM;
+
     return [
-      { order: 1, titleKey: 'plan.block.warmup', prescription: { kind: 'RUN', distanceM: 1000, zone: 'EASY' } },
+      { order: 1, titleKey: 'plan.block.warmup', prescription: { kind: 'RUN', distanceM: warmupM, zone: 'EASY' } },
       {
         order: 2,
         titleKey: 'plan.block.intervals',
@@ -242,7 +247,7 @@ function runBlocks(
         targetRpeMin: spec.rpeMin,
         targetRpeMax: spec.rpeMax,
       },
-      { order: 3, titleKey: 'plan.block.cooldown', prescription: { kind: 'RUN', distanceM: 1000, zone: 'EASY' } },
+      { order: 3, titleKey: 'plan.block.cooldown', prescription: { kind: 'RUN', distanceM: cooldownM, zone: 'EASY' } },
     ];
   }
 
@@ -304,12 +309,29 @@ export function prescribeWeek(input: WeekPrescriptionInput): readonly PlannedSes
   const canAffordSimulation = volume.runningBudgetM >= SIMULATION_RUNNING_M;
 
   const simulationPositions = new Set<number>();
+  // Rounds are fitted per slot rather than taken as fixed: §7.7's
+  // Race-Specific prescription is 4 x 1km, which on its own exceeds the whole
+  // weekly budget of an athlete running under 4km a week. Budget-first means
+  // the budget constrains the prescription, not the other way round.
+  const roundsByPosition = new Map<number, number>();
+  let hybridAllowanceM = volume.runningBudgetM;
+
   for (const position of hybridPositions) {
-    if (canAffordSimulation && shouldSimulate(phase, weekInPhase, firstDayOffset + position, totalWeeks)) {
+    if (
+      canAffordSimulation &&
+      shouldSimulate(phase, weekInPhase, firstDayOffset + position, totalWeeks) &&
+      hybridAllowanceM >= SIMULATION_RUNNING_M
+    ) {
       simulationPositions.add(position);
       hybridMetres += SIMULATION_RUNNING_M;
+      hybridAllowanceM -= SIMULATION_RUNNING_M;
     } else if (compromised !== null) {
-      hybridMetres += compromisedRunningMetres(compromised);
+      let rounds = compromised.rounds;
+      while (rounds > 1 && rounds * compromised.runDistanceM > hybridAllowanceM) rounds -= 1;
+      roundsByPosition.set(position, rounds);
+      const metres = rounds * compromised.runDistanceM;
+      hybridMetres += metres;
+      hybridAllowanceM -= metres;
     }
   }
 
@@ -328,15 +350,25 @@ export function prescribeWeek(input: WeekPrescriptionInput): readonly PlannedSes
   const intervalReps = wantsIntervals
     ? affordableIntervalReps(runBudget, runPositions.length)
     : 0;
-  const intervalMetres = intervalReps > 0 ? INTERVAL_FIXED_M + intervalReps * 1000 : 0;
+  let intervalMetres = intervalReps > 0 ? INTERVAL_FIXED_M + intervalReps * 1000 : 0;
 
   // Whatever remains is shared between the steady runs, dropping a slot at a
   // time until each one is worth doing.
-  const steadyBudget = runBudget - intervalMetres;
+  let steadyBudget = runBudget - intervalMetres;
   let steadyRuns = runPositions.length - (intervalReps > 0 ? 1 : 0);
   while (steadyRuns > 0 && steadyBudget / steadyRuns < MIN_RUN_DISTANCE_M) {
     steadyRuns -= 1;
   }
+
+  // Budget no steady slot can absorb goes back into the quality session as a
+  // longer warm-up and cool-down, rather than being silently dropped. Left
+  // unspent it reads to the validator as an unplanned mid-phase deload — the
+  // repeat cap binds hardest for athletes with only one run slot in the week.
+  if (intervalReps > 0 && steadyRuns === 0 && steadyBudget > 0) {
+    intervalMetres = runBudget;
+    steadyBudget = 0;
+  }
+
   const perRunM = steadyRuns > 0 ? Math.round(steadyBudget / steadyRuns) : 0;
   const runsToPrescribe = steadyRuns + (intervalReps > 0 ? 1 : 0);
 
@@ -477,13 +509,15 @@ export function prescribeWeek(input: WeekPrescriptionInput): readonly PlannedSes
       return;
     }
 
+    const rounds = roundsByPosition.get(position) ?? compromised.rounds;
+
     sessions.push({
       ...base,
       type: 'COMPROMISED_RUN',
       titleKey: 'plan.session.compromisedRun',
       rationaleKey: 'plan.rationale.compromisedRun',
       params: {
-        rounds: compromised.rounds,
+        rounds,
         runDistanceM: compromised.runDistanceM,
       },
       blocks: [
@@ -492,7 +526,7 @@ export function prescribeWeek(input: WeekPrescriptionInput): readonly PlannedSes
           titleKey: 'plan.block.compromisedRounds',
           prescription: {
             kind: 'COMPROMISED_ROUNDS',
-            rounds: compromised.rounds,
+            rounds,
             stationsPerRound: compromised.stationsPerRound,
             runDistanceM: compromised.runDistanceM,
             zone: compromised.zone,

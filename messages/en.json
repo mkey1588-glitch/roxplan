@@ -70,5 +70,17 @@
       "raceSimulation": "A full run-through, so race day is a repeat of something you've already done rather than a first attempt.",
       "displacedBySimulation": "Lighter today — this week's simulation is the hard session, and stacking more running on top of it would cost you more than it gains."
     }
+  },
+  "guardrail": {
+    "volumeCeiling": "This week's running would rise too far above your recent load. Increases are capped to protect against the overuse injuries that come from ramping too fast.",
+    "sessionCountRamp": "This week adds more than one extra session compared with last week.",
+    "deloadInRaceSpecific": "An easier week has landed inside the race-specific phase, which manages its own load through simulation spacing.",
+    "deloadNearRace": "An easier week has landed too close to race day, which would give you two easy weeks back to back before you race.",
+    "deloadMissing": "This should have been a recovery week. Training hard for more than three weeks without unloading is how progress stalls and injuries start.",
+    "weeklyRestDay": "This week has no full rest day.",
+    "simulationNearRace": "A race simulation is scheduled too close to race day to recover from.",
+    "gateWithoutFallback": "A session that unlocks with progress has no valid alternative to serve in the meantime.",
+    "insufficientRunwayRouting": "There isn't enough time before this race for a full training plan; a readiness plan should be used instead.",
+    "beginnerConsecutiveIntensity": "Two hard sessions have landed on consecutive days."
   }
 }

@@ -1,3 +1,4 @@
+import { DAYS_PER_WEEK } from './calendar';
 import type { AthleticBackground, PhaseType } from './types';
 
 /**
@@ -44,8 +45,6 @@ export type SlotKind = (typeof SLOT_KINDS)[number];
 
 /** Round-robin order when two kinds have equal remaining counts. */
 const KIND_PRIORITY: readonly Exclude<SlotKind, 'REST'>[] = ['RUN', 'STRENGTH', 'HYBRID'];
-
-export const DAYS_PER_WEEK = 7;
 
 /** DECISIONS.md D6: two sessions a week is supported, with a note. */
 export const MIN_SESSIONS_PER_WEEK = 2;
@@ -235,6 +234,22 @@ export function scheduleWeek(composition: WeeklyComposition): readonly SlotKind[
     if (kind === undefined) throw new Error('template scheduling ran out of sessions');
     slots[position] = kind;
   });
+
+  // The template repeats identically, so the last day of one week sits next to
+  // the first day of the next (ERRATA F31). A hybrid is always the week's
+  // hardest session and the following week opens with quality work, so ending
+  // on one puts two hard days back to back — which §7.4 forbids outright for
+  // BEGINNER. Move it one training slot earlier.
+  const lastDay = DAYS_PER_WEEK - 1;
+  if (slots[0] !== 'REST' && slots[lastDay] === 'HYBRID') {
+    for (let day = lastDay - 1; day >= 0; day -= 1) {
+      const candidate = slots[day];
+      if (candidate === undefined || candidate === 'REST' || candidate === 'HYBRID') continue;
+      slots[day] = 'HYBRID';
+      slots[lastDay] = candidate;
+      break;
+    }
+  }
 
   return Object.freeze(slots);
 }

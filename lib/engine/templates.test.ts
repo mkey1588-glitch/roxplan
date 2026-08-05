@@ -2,9 +2,9 @@ import { describe, expect, it } from 'vitest';
 
 import enMessages from '@/messages/en.json';
 
+import { DAYS_PER_WEEK } from './calendar';
 import {
   compositionFor,
-  DAYS_PER_WEEK,
   InvalidSessionsPerWeekError,
   MAX_SESSIONS_PER_WEEK,
   MIN_REST_DAYS_PER_WEEK,
