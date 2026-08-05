@@ -102,8 +102,16 @@ Format: decision → rationale → what it means for the code.
 
 ---
 
-## D10 — OPEN: Deployment target
+## D10 — RESOLVED: Deployment target is Vercel
 
-Vercel is the path of least resistance for Next.js and has a usable free tier. Postgres via Supabase or Neon pairs with it cleanly. But this depends on your budget, where your users are (latency from APAC matters if you're in Osaka), and whether you care about vendor lock-in.
+**Decided 2026-08-06.**
 
-**Not blocking for the first several build sessions.** Decide before you wire up the database, not before you write the engine.
+**Decision:** Vercel, on the free tier. Live at https://hyrox-eight.vercel.app.
+
+**Rationale:** path of least resistance for Next.js and zero config — `vercel --prod` was a single command against an already-authenticated account. Latency from APAC and vendor lock-in were the stated concerns; neither bites yet, and both are re-decidable because nothing in the codebase depends on Vercel. There is no adapter, no platform SDK, and no edge-runtime code.
+
+**Code implication:**
+- Nothing. The app is a stock Next.js build. Moving to Cloudflare Workers, Fly or a container later is a hosting change, not a code change — worth keeping true.
+- `.vercel/` is gitignored.
+- Deployment is currently manual (`vercel --prod`). Connect the GitHub repo for push-to-deploy when the pace justifies it.
+- **No database yet.** The plan regenerates per request from URL parameters, which is why this deploys with no environment variables at all. When persistence lands, Postgres pairs cleanly via Neon or Supabase — and that is the point at which the APAC latency question becomes real, because the database round trip will dominate.
