@@ -26,6 +26,20 @@ import type { Division, StationId } from '@/lib/seeds/types';
 
 export const dynamic = 'force-dynamic';
 
+/**
+ * Run this route in Tokyo rather than Vercel's US-East default.
+ *
+ * The plan is generated per request, so before this every page view crossed
+ * the Pacific twice: requests entered the network at the Osaka edge and then
+ * executed in iad1, measured at 0.56-1.30s TTFB from Japan. The engine is a
+ * pure function with no data dependencies, so there is nothing tying
+ * execution to a region — it may as well run next to the reader.
+ *
+ * Revisit when the database lands: the function should sit beside Postgres,
+ * and that becomes the constraint rather than this line.
+ */
+export const preferredRegion = ['hnd1'];
+
 const WEEKDAYS = ['', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 const MONTHS = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
