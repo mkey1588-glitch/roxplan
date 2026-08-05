@@ -1,0 +1,56 @@
+{
+  "season": "2026-27",
+  "source": {
+    "document": "HYROX EN SINGLE RULEBOOK 26/27",
+    "url": "https://maintain.hyrox.com/rulebooks/HYROX_RulebookSingles_EN.pdf",
+    "sections": "8.2, 8.3, 8.6, 8.7, 8.8",
+    "retrieved": "2026-08-05"
+  },
+  "$comment": [
+    "Loads form a single ladder, not two independent per-sex tables: the rulebook",
+    "prints 'WOMEN PRO / MEN' as one row, so a Pro woman lifts exactly what an Open",
+    "man lifts. That equality is asserted in the tests as a domain invariant.",
+    "Wall ball TARGET HEIGHT depends only on sex (2.70m women, 3.00m men) and does",
+    "not change between Open and Pro; only the ball weight does.",
+    "Rep counts and distances are identical across every division — only weights",
+    "change. Wall balls are 100 reps for everyone.",
+    "Doubles, Mixed Doubles and Relay are deliberately absent: this rulebook covers",
+    "Singles only, and per DECISIONS.md D1 the engine rejects those divisions",
+    "rather than guessing at their loads.",
+    "All units SI (DECISIONS.md D3)."
+  ],
+  "divisions": {
+    "OPEN_SINGLES": {
+      "FEMALE": {
+        "SLED_PUSH": { "kind": "SLED", "totalKg": 102, "includesSled": true },
+        "SLED_PULL": { "kind": "SLED", "totalKg": 78, "includesSled": true },
+        "FARMERS_CARRY": { "kind": "PER_HAND", "perHandKg": 16, "hands": 2, "colour": "WHITE" },
+        "SANDBAG_LUNGES": { "kind": "IMPLEMENT", "loadKg": 10, "colour": "WHITE" },
+        "WALL_BALLS": { "kind": "WALL_BALL", "loadKg": 4, "targetHeightM": 2.7, "colour": "WHITE" }
+      },
+      "MALE": {
+        "SLED_PUSH": { "kind": "SLED", "totalKg": 152, "includesSled": true },
+        "SLED_PULL": { "kind": "SLED", "totalKg": 103, "includesSled": true },
+        "FARMERS_CARRY": { "kind": "PER_HAND", "perHandKg": 24, "hands": 2, "colour": "GREY" },
+        "SANDBAG_LUNGES": { "kind": "IMPLEMENT", "loadKg": 20, "colour": "GREY" },
+        "WALL_BALLS": { "kind": "WALL_BALL", "loadKg": 6, "targetHeightM": 3.0, "colour": "GREY" }
+      }
+    },
+    "PRO_SINGLES": {
+      "FEMALE": {
+        "SLED_PUSH": { "kind": "SLED", "totalKg": 152, "includesSled": true },
+        "SLED_PULL": { "kind": "SLED", "totalKg": 103, "includesSled": true },
+        "FARMERS_CARRY": { "kind": "PER_HAND", "perHandKg": 24, "hands": 2, "colour": "GREY" },
+        "SANDBAG_LUNGES": { "kind": "IMPLEMENT", "loadKg": 20, "colour": "GREY" },
+        "WALL_BALLS": { "kind": "WALL_BALL", "loadKg": 6, "targetHeightM": 2.7, "colour": "GREY" }
+      },
+      "MALE": {
+        "SLED_PUSH": { "kind": "SLED", "totalKg": 202, "includesSled": true },
+        "SLED_PULL": { "kind": "SLED", "totalKg": 153, "includesSled": true },
+        "FARMERS_CARRY": { "kind": "PER_HAND", "perHandKg": 32, "hands": 2, "colour": "BLACK" },
+        "SANDBAG_LUNGES": { "kind": "IMPLEMENT", "loadKg": 30, "colour": "BLACK" },
+        "WALL_BALLS": { "kind": "WALL_BALL", "loadKg": 9, "targetHeightM": 3.0, "colour": "BLACK" }
+      }
+    }
+  }
+}

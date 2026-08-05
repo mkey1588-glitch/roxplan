@@ -1,0 +1,54 @@
+{
+  "season": "2026-27",
+  "source": {
+    "document": "PRD.md §5.3 (HYROX Physical Fitness Test, P'F\"T)",
+    "$comment": "The PFT is a separate HYROX product from the race rulebook. These figures come from the project's own PRD, not from the Singles rulebook."
+  },
+  "$comment": [
+    "Fixed sequence, performed back to back, for time. Used as the optional",
+    "onboarding benchmark and as the re-test at the end of Foundation and Build",
+    "(DECISIONS.md D2 — prompted, never a gate).",
+    "Division guidance is advisory only. Note it can suggest DOUBLES, which the",
+    "engine does not support in v1 — see ERRATA.md F19."
+  ],
+  "segments": [
+    {
+      "order": 1,
+      "id": "RUN",
+      "work": { "kind": "DISTANCE", "distanceM": 1000 },
+      "treadmillInclinePercent": 2
+    },
+    {
+      "order": 2,
+      "id": "BURPEE_BROAD_JUMPS",
+      "work": { "kind": "REPS", "reps": 50 },
+      "jumpDistanceM": 0.9
+    },
+    {
+      "order": 3,
+      "id": "STATIONARY_LUNGES",
+      "work": { "kind": "REPS", "reps": 100 }
+    },
+    {
+      "order": 4,
+      "id": "ROW",
+      "work": { "kind": "DISTANCE", "distanceM": 1000 }
+    },
+    {
+      "order": 5,
+      "id": "HAND_RELEASE_PUSH_UPS",
+      "work": { "kind": "REPS", "reps": 30 }
+    },
+    {
+      "order": 6,
+      "id": "WALL_BALLS",
+      "work": { "kind": "REPS", "reps": 100 },
+      "loadKgBySex": { "FEMALE": 4, "MALE": 6 }
+    }
+  ],
+  "divisionGuidance": [
+    { "division": "PRO_SINGLES", "minTotalSecs": 900, "maxTotalSecs": 1500 },
+    { "division": "OPEN_SINGLES", "minTotalSecs": 1500, "maxTotalSecs": 2100 },
+    { "division": "DOUBLES", "minTotalSecs": 1800, "maxTotalSecs": 2700 }
+  ]
+}

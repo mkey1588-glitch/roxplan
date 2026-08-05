@@ -1,0 +1,58 @@
+{
+  "$comment": "The 8 HYROX stations in fixed race order. Identical worldwide and stable across seasons — only the loads change, which live in divisions.<season>.json. Source: HYROX EN SINGLE RULEBOOK 26/27, section 8. All units SI (DECISIONS.md D3).",
+  "stations": [
+    {
+      "id": "SKI_ERG",
+      "order": 1,
+      "work": { "kind": "DISTANCE", "distanceM": 1000 },
+      "primaryDemand": "UPPER_BODY_AEROBIC_POWER"
+    },
+    {
+      "id": "SLED_PUSH",
+      "order": 2,
+      "work": { "kind": "DISTANCE", "distanceM": 50, "lengths": 4, "lengthM": 12.5 },
+      "primaryDemand": "LEG_DRIVE_STRENGTH_ENDURANCE"
+    },
+    {
+      "id": "SLED_PULL",
+      "order": 3,
+      "work": { "kind": "DISTANCE", "distanceM": 50, "lengths": 4, "lengthM": 12.5 },
+      "primaryDemand": "POSTERIOR_CHAIN_GRIP"
+    },
+    {
+      "id": "BURPEE_BROAD_JUMP",
+      "order": 4,
+      "work": { "kind": "DISTANCE", "distanceM": 80 },
+      "primaryDemand": "EXPLOSIVE_ENDURANCE_FULL_BODY"
+    },
+    {
+      "id": "ROWING",
+      "order": 5,
+      "work": { "kind": "DISTANCE", "distanceM": 1000 },
+      "primaryDemand": "FULL_BODY_AEROBIC"
+    },
+    {
+      "id": "FARMERS_CARRY",
+      "order": 6,
+      "work": { "kind": "DISTANCE", "distanceM": 200 },
+      "primaryDemand": "GRIP_TRUNK_STABILITY"
+    },
+    {
+      "id": "SANDBAG_LUNGES",
+      "order": 7,
+      "work": { "kind": "DISTANCE", "distanceM": 100 },
+      "primaryDemand": "UNILATERAL_LEG_ENDURANCE"
+    },
+    {
+      "id": "WALL_BALLS",
+      "order": 8,
+      "work": { "kind": "REPS", "reps": 100 },
+      "primaryDemand": "LEGS_SHOULDERS_UNDER_FATIGUE"
+    }
+  ],
+  "run": {
+    "$comment": "A 1km run precedes each station; 8km of running in total.",
+    "segments": 8,
+    "segmentDistanceM": 1000
+  }
+}

@@ -84,6 +84,30 @@ Consequences for the engine:
 - **Auto-regulated deloads inherit F8.3's suppression window.** Without this, §F7's "3+ consecutive low-readiness days → suggest a deload" can drop a deload immediately before the taper — exactly the two-consecutive-easy-weeks bug F8.3 was written to prevent.
 - **`SessionAdjustment.delta{}` needs a typed, versioned, scoped schema.** It must target a specific `SessionBlock`, and must only apply when the target session still matches — after a race-date change regenerates the plan, a "−40% volume" adjustment keyed to a date would otherwise land on a completely different session type.
 
+## R5 — Race loads and rep counts come from the 26/27 Singles rulebook, and three PRD figures were wrong
+
+Amends §5.1, §5.2. Resolves finding F25. Verified against the official [HYROX EN SINGLE RULEBOOK 26/27](https://maintain.hyrox.com/rulebooks/HYROX_RulebookSingles_EN.pdf), sections 8.2, 8.3, 8.6, 8.7, 8.8, retrieved 2026-08-05.
+
+**Three corrections, in descending order of how much damage they would have done:**
+
+1. **Open wall-ball loads in the PRD are wrong, and so is `research.md`.** §5.2 gives Open as "Wall Ball 9kg→10ft (men) / 6kg→9ft (women)", and `research.md` §2.2 repeats it. The rulebook is unambiguous: **Open is 6kg for men and 4kg for women.** The 9kg figure is *Men Pro*. Prescribing 9kg wall balls to an Open first-timer for 100 reps at the end of a race simulation is exactly the kind of overload this product exists to prevent.
+2. **Wall balls are 100 reps for every division and both sexes.** §5.1's "75–100 reps (division dependent)" is wrong; §5.2 and `research.md` §2.2 ("only the weights change") are right. Correct §5.1.
+3. **Target heights are metric and exact: 2.70m for women, 3.00m for men.** The PRD's "10ft / 9ft" are imperial approximations that do not convert cleanly (10ft = 3.048m, 9ft = 2.743m). Per D3 the metric values are authoritative and imperial is display-only.
+
+**Structural finding — the load table is one ladder, not two.** The rulebook prints `WOMEN PRO / MEN` as a single row at every loaded station, so **a Pro woman lifts exactly what an Open man lifts**. §5.2's "keyed by `(division, sex, station)`" is still the right storage shape, but the equality is a domain invariant and is asserted in `lib/seeds/index.test.ts` so a future season update cannot silently break it. Wall-ball *target height* is the sole exception: it tracks sex only, never the ladder.
+
+| Station | Women Open | Women Pro / Men Open | Men Pro |
+|---|---|---|---|
+| Sled Push (50m) | 102 kg | 152 kg | 202 kg |
+| Sled Pull (50m) | 78 kg | 103 kg | 153 kg |
+| Farmers Carry (200m) | 2 × 16 kg | 2 × 24 kg | 2 × 32 kg |
+| Sandbag Lunges (100m) | 10 kg | 20 kg | 30 kg |
+| Wall Balls (100 reps) | 4 kg @ 2.70m | 6 kg @ 2.70m (W) / 3.00m (M) | 9 kg @ 3.00m |
+
+Sled figures are total mass **including the sled itself**, as the rulebook states.
+
+**Doubles, Mixed Doubles and Relay have no load data.** The Singles rulebook does not cover them and I will not infer them. `seeds/divisions.2026-27.json` omits those divisions and the loader throws `MissingDivisionDataError`, which is distinct from the engine's `UnsupportedDivisionError` (D1): "we have no data" is not the same as "the engine refuses to plan this".
+
 ---
 
 # Part 2 — Findings register
@@ -133,7 +157,7 @@ Consequences for the engine:
 
 | # | Finding | Proposed resolution |
 |---|---|---|
-| **F25** | **Seed-data contradiction.** §5.2 says only weights change between divisions; §5.1 says wall balls are "75–100 reps (division dependent)"; `research.md` §2.2 says rep counts stay constant. | The load table needs an **authoritative source** (the official Singles rulebook for the season). Do not infer the numbers. One of these statements is wrong. **Wants a second opinion.** |
+| **F25** | ~~**Seed-data contradiction.** §5.2 says only weights change between divisions; §5.1 says wall balls are "75–100 reps (division dependent)"; `research.md` §2.2 says rep counts stay constant.~~ | **RESOLVED by R5.** §5.1 was wrong (100 reps for everyone). Checking the rulebook also turned up a worse error the original finding missed: the PRD's and `research.md`'s **Open wall-ball weights are wrong** — 6kg/4kg, not 9kg/6kg. |
 | **F26** | For `BEGINNER` at exactly 8 weeks, Build and Race-Spec are already at their minimums (3/2/2), so §7.3's "extend Foundation up to 2 weeks" silently becomes a no-op. | Probably acceptable — §7.5 gating carries the beginner safety. Confirm it is deliberate. |
 | **F27** | Undefined edge inputs: race date today or in the past (`weeksToRace ≤ 0`); `availableDays.length < sessionsPerWeek`. | Explicit handling and error types for both. |
 | **F28** | §7.3 `RUNNER`: "station-strength work introduced earlier" — earlier than what? §7.2 already puts light-load station work in Foundation. As written it is a no-op. | Either delete the line or make it concrete. |
