@@ -26,6 +26,43 @@ import { phaseSpans } from './phases';
 /** Total running metres in a full race simulation: 8 x 1km. */
 export const SIMULATION_RUNNING_M = 8000;
 
+/** Stations in a full race. */
+export const SIMULATION_FULL_STATIONS = 8;
+
+/**
+ * Fewest stations worth calling a race simulation (ERRATA F34 / R10).
+ *
+ * §7.2 prescribes "full **or near-full** simulations". Below four stations a
+ * rehearsal is not near-full — it is a compromised run, which §7.7 already
+ * provides and does better.
+ */
+export const SIMULATION_MIN_STATIONS = 4;
+
+export interface SimulationScale {
+  readonly stations: number;
+  readonly runDistanceM: number;
+}
+
+/**
+ * Sizes a race simulation to what the week's running budget can hold.
+ *
+ * A full simulation is 8km of running on its own, which exceeds the entire
+ * weekly budget of an athlete running under that. Previously they got no
+ * simulation at all — the athlete least likely to have raced before was the
+ * one who never rehearsed. A shortened race in the correct station order
+ * teaches the same transitions at a load they can absorb.
+ *
+ * Returns null when even a four-station rehearsal will not fit.
+ */
+export function simulationFor(runningBudgetM: number): SimulationScale | null {
+  if (runningBudgetM >= SIMULATION_RUNNING_M) {
+    return { stations: SIMULATION_FULL_STATIONS, runDistanceM: SIMULATION_RUNNING_M };
+  }
+  const stations = Math.floor(runningBudgetM / 1000);
+  if (stations < SIMULATION_MIN_STATIONS) return null;
+  return { stations, runDistanceM: stations * 1000 };
+}
+
 /** Shortest run worth prescribing; below this a slot becomes recovery instead. */
 export const MIN_RUN_DISTANCE_M = 1000;
 
@@ -218,14 +255,14 @@ export function selectStations(
 function estimateHybridMetres({
   hybridCount,
   compromised,
-  canSimulate,
+  simulationM,
 }: {
   hybridCount: number;
   compromised: { rounds: number; runDistanceM: number } | null;
-  canSimulate: boolean;
+  simulationM: number | null;
 }): number {
   if (hybridCount <= 0) return 0;
-  if (canSimulate) return SIMULATION_RUNNING_M;
+  if (simulationM !== null) return simulationM;
   if (compromised === null) return 0;
   return hybridCount * compromised.rounds * compromised.runDistanceM;
 }
@@ -351,10 +388,11 @@ export function prescribeWeek(input: WeekPrescriptionInput): readonly PlannedSes
   // much running the hybrids will consume — and therefore how much the run
   // slots must carry.
   const provisional = templateFor(sessionsPerWeek, phase, background);
+  const simulation = phase === 'RACE_SPECIFIC' ? simulationFor(volume.runningBudgetM) : null;
   const provisionalHybridMetres = estimateHybridMetres({
     hybridCount: provisional.composition.hybrid,
     compromised: compromisedRunFor({ phase, weekInPhase, weeksInPhase, background }),
-    canSimulate: phase === 'RACE_SPECIFIC' && volume.runningBudgetM >= SIMULATION_RUNNING_M,
+    simulationM: simulation?.runDistanceM ?? null,
   });
 
   const template = templateFor(sessionsPerWeek, phase, background, {
@@ -382,12 +420,6 @@ export function prescribeWeek(input: WeekPrescriptionInput): readonly PlannedSes
     .filter((entry) => entry.slot === 'HYBRID')
     .map((entry) => entry.position);
 
-  // A full simulation is 8km of running on its own. An athlete whose whole
-  // weekly budget is below that cannot absorb one without breaching guardrail
-  // 1, so they keep compromised runs instead (ERRATA F34). Their gate and
-  // fallback still give them transition practice.
-  const canAffordSimulation = volume.runningBudgetM >= SIMULATION_RUNNING_M;
-
   const simulationPositions = new Set<number>();
   // Rounds are fitted per slot rather than taken as fixed: §7.7's
   // Race-Specific prescription is 4 x 1km, which on its own exceeds the whole
@@ -398,13 +430,13 @@ export function prescribeWeek(input: WeekPrescriptionInput): readonly PlannedSes
 
   for (const position of hybridPositions) {
     if (
-      canAffordSimulation &&
+      simulation !== null &&
       shouldSimulate(phase, weekInPhase, firstDayOffset + position, totalWeeks) &&
-      hybridAllowanceM >= SIMULATION_RUNNING_M
+      hybridAllowanceM >= simulation.runDistanceM
     ) {
       simulationPositions.add(position);
-      hybridMetres += SIMULATION_RUNNING_M;
-      hybridAllowanceM -= SIMULATION_RUNNING_M;
+      hybridMetres += simulation.runDistanceM;
+      hybridAllowanceM -= simulation.runDistanceM;
     } else if (compromised !== null) {
       let rounds = compromised.rounds;
       while (rounds > 1 && rounds * compromised.runDistanceM > hybridAllowanceM) rounds -= 1;
@@ -548,18 +580,27 @@ export function prescribeWeek(input: WeekPrescriptionInput): readonly PlannedSes
     }
 
     // HYBRID
-    if (simulationPositions.has(position)) {
+    if (simulationPositions.has(position) && simulation !== null) {
+      const isFull = simulation.stations === SIMULATION_FULL_STATIONS;
       sessions.push({
         ...base,
         type: 'RACE_SIMULATION',
-        titleKey: 'plan.session.raceSimulation',
-        rationaleKey: 'plan.rationale.raceSimulation',
-        params: { runDistanceM: SIMULATION_RUNNING_M },
+        // Named honestly: calling a five-station rehearsal a "race simulation"
+        // would tell the athlete they had run the race when they had not.
+        titleKey: isFull ? 'plan.session.raceSimulation' : 'plan.session.partialRaceSimulation',
+        rationaleKey: isFull
+          ? 'plan.rationale.raceSimulation'
+          : 'plan.rationale.partialRaceSimulation',
+        params: { runDistanceM: simulation.runDistanceM, stations: simulation.stations },
         blocks: [
           {
             order: 1,
-            titleKey: 'plan.block.simulation',
-            prescription: { kind: 'SIMULATION', runDistanceM: SIMULATION_RUNNING_M, stations: 8 },
+            titleKey: isFull ? 'plan.block.simulation' : 'plan.block.partialSimulation',
+            prescription: {
+              kind: 'SIMULATION',
+              runDistanceM: simulation.runDistanceM,
+              stations: simulation.stations,
+            },
             targetRpeMin: 7,
             targetRpeMax: 9,
           },

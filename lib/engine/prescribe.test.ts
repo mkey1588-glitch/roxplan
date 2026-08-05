@@ -12,7 +12,10 @@ import {
   selectStations,
   shouldSimulate,
   SIMULATION_EXCLUSION_DAYS,
+  SIMULATION_FULL_STATIONS,
+  SIMULATION_MIN_STATIONS,
   SIMULATION_RUNNING_M,
+  simulationFor,
   weeklyRunningMetres,
 } from './prescribe';
 import type { PlannedSession } from './prescribe';
@@ -217,12 +220,41 @@ describe('race simulations (guardrail 5)', () => {
     expect(shouldSimulate('RACE_SPECIFIC', 1, 0, 20)).toBe(true);
   });
 
-  it('skips the simulation for an athlete whose whole week is under 8km (ERRATA F34)', () => {
-    // A full simulation would be the entire week's running and more, which
-    // breaches guardrail 1 on its own. They keep compromised runs instead.
+  it('scales the simulation to what a low-volume athlete can absorb (ERRATA F34)', () => {
+    // A full 8km simulation exceeds their whole week. They get a shortened
+    // race in the correct order rather than no rehearsal at all.
     const lowVolume = prescribePlan(16, 4, 'BEGINNER', 4000).flat();
-    expect(lowVolume.some((session) => session.type === 'RACE_SIMULATION')).toBe(false);
-    expect(lowVolume.some((session) => session.type === 'COMPROMISED_RUN')).toBe(true);
+    const simulations = lowVolume.filter((session) => session.type === 'RACE_SIMULATION');
+
+    expect(simulations.length).toBeGreaterThan(0);
+    for (const session of simulations) {
+      const block = session.blocks[0];
+      if (block?.prescription.kind !== 'SIMULATION') throw new Error('expected a simulation');
+      expect(block.prescription.stations).toBeGreaterThanOrEqual(SIMULATION_MIN_STATIONS);
+      expect(block.prescription.stations).toBeLessThan(SIMULATION_FULL_STATIONS);
+      // Race order preserved: one 1km run per station, as in the real race.
+      expect(block.prescription.runDistanceM).toBe(block.prescription.stations * 1000);
+    }
+  });
+
+  it('never calls a shortened rehearsal a full race simulation', () => {
+    const lowVolume = prescribePlan(16, 4, 'BEGINNER', 4000).flat();
+    for (const session of lowVolume) {
+      if (session.type !== 'RACE_SIMULATION') continue;
+      const stations = Number(session.params.stations);
+      expect(session.titleKey).toBe(
+        stations === SIMULATION_FULL_STATIONS
+          ? 'plan.session.raceSimulation'
+          : 'plan.session.partialRaceSimulation',
+      );
+    }
+  });
+
+  it('gives no rehearsal at all only when even four stations will not fit', () => {
+    expect(simulationFor(3999)).toBeNull();
+    expect(simulationFor(4000)).toEqual({ stations: 4, runDistanceM: 4000 });
+    expect(simulationFor(8000)).toEqual({ stations: 8, runDistanceM: 8000 });
+    expect(simulationFor(20000)).toEqual({ stations: 8, runDistanceM: 8000 });
   });
 
   it('still simulates for an athlete with the volume to absorb it', () => {

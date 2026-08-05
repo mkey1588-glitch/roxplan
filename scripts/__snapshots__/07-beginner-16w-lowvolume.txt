@@ -126,7 +126,8 @@ WEEK 12  RACE_SPECIFIC  running   4.0 km   4 sessions
    Thu 22 Oct   Rest day                
    Fri 23 Oct   Strength — lower body   10 min  ·  3 × 8 — Squat pattern, Hinge pattern, Lunge pattern  ·  5 min
    Sat 24 Oct   Rest day                
-   Sun 25 Oct   Compromised run         4 rounds: 2 stations → 1.0 km @ threshold (RPE 7-8)
+   Sun 25 Oct   Part-race simulation    4 stations + 4.0 km running, race weight
+                   [locked until 3 compromised runs completed — serves compromised run meanwhile]
    Mon 26 Oct   Rest day                
    Tue 27 Oct   Recovery and mobility   20 min
 
@@ -146,7 +147,8 @@ WEEK 14  RACE_SPECIFIC  running   4.0 km   4 sessions
    Thu 05 Nov   Rest day                
    Fri 06 Nov   Strength — lower body   10 min  ·  3 × 8 — Squat pattern, Hinge pattern, Lunge pattern  ·  5 min
    Sat 07 Nov   Rest day                
-   Sun 08 Nov   Compromised run         4 rounds: 2 stations → 1.0 km @ threshold (RPE 7-8), race order
+   Sun 08 Nov   Part-race simulation    4 stations + 4.0 km running, race weight
+                   [locked until 3 compromised runs completed — serves compromised run meanwhile]
    Mon 09 Nov   Rest day                
    Tue 10 Nov   Recovery and mobility   20 min
 

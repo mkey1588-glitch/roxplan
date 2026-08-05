@@ -37,7 +37,8 @@
       "stationSkill": "Station skills",
       "compromisedRun": "Compromised run",
       "raceSimulation": "Race simulation",
-      "recovery": "Recovery and mobility"
+      "recovery": "Recovery and mobility",
+      "partialRaceSimulation": "Part-race simulation"
     },
     "block": {
       "warmup": "Warm-up",
@@ -51,7 +52,8 @@
       "compromisedRounds": "Rounds — station, then run",
       "simulation": "Full race simulation",
       "mobility": "Mobility",
-      "strengthAccessory": "Strength — after the main work"
+      "strengthAccessory": "Strength — after the main work",
+      "partialSimulation": "Shortened race, in race order"
     },
     "movement": {
       "squat": "Squat pattern",
@@ -69,7 +71,8 @@
       "stationSkill": "Practising the movements while fresh means your technique holds up later, when you're not.",
       "compromisedRun": "Seven of your eight race runs start on legs that have just finished a station. This is the only session that rehearses that.",
       "raceSimulation": "A full run-through, so race day is a repeat of something you've already done rather than a first attempt.",
-      "displacedBySimulation": "Lighter today — this week's simulation is the hard session, and stacking more running on top of it would cost you more than it gains."
+      "displacedBySimulation": "Lighter today — this week's simulation is the hard session, and stacking more running on top of it would cost you more than it gains.",
+      "partialRaceSimulation": "A shortened race in the correct order. You're not ready to absorb the full eight stations yet, and rehearsing the transitions matters more than covering the whole distance."
     }
   },
   "guardrail": {

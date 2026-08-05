@@ -8,7 +8,7 @@ Two parts:
 - **Part 1 — Amendments (R1–R6).** Decided, authoritative. Where these differ from PRD v0.2, **this document wins.** Fold into PRD v0.3 when convenient.
 - **Part 2 — Findings register (F04–F34).** Defects found against v0.2, plus those found during implementation. Resolved entries are struck through and say what resolved them; the rest carry a proposed resolution. Severity: **P0** = produces a wrong or unbuildable engine; **P1** = will need rework; **P2** = tidy-up.
 
-**Still wanting your input:** F32 (race-pace formula is an unvalidated modelling assumption), F17 (confirm the high-intensity session set, implemented provisionally as `INTERVAL_RUN`, `COMPROMISED_RUN`, `RACE_SIMULATION`), F19 (what to do when the PFT recommends Doubles), F34 (whether low-volume athletes should get a scaled 'near-full' simulation rather than none).
+**Still wanting your input:** F32 (race-pace formula is an unvalidated modelling assumption), F17 (confirm the high-intensity session set, implemented provisionally as `INTERVAL_RUN`, `COMPROMISED_RUN`, `RACE_SIMULATION`), F19 (what to do when the PFT recommends Doubles).
 
 Section references (`§7.1`, `F8.3`) are to `docs/PRD.md`. Decision references (`D9`) are to `docs/DECISIONS.md`.
 
@@ -168,6 +168,18 @@ Amends §7.4. Resolves F35. Approved 2026-08-06.
 
 Sizing happens in two passes, because the run/strength split depends on how much running the hybrids consume, which depends on the template. The hybrid *count* is invariant under the conversion, so a provisional template settles the hybrid metres and the final one settles the split. The hybrid estimate is deliberately approximate — being a session out only shifts the split, and guardrail 5 and the volume ceiling are both validated independently afterwards.
 
+## R10 — Race simulations scale to the athlete; a shortened one is named as such
+
+Amends §7.2. Resolves F34. Approved 2026-08-06.
+
+§7.2 prescribes "full **or near-full** simulations". The engine implemented only *full*, and skipped the session entirely when 8km of running exceeded the athlete's whole weekly budget — so **the athlete least likely to have raced before was the one who never rehearsed.**
+
+`simulationFor(budget)` now sizes the rehearsal: 8 stations at 8km when it fits, otherwise `floor(budget / 1000)` stations with one 1km run each, preserving race order. Below four stations it returns null and the athlete keeps compromised runs, because a three-station rehearsal is not "near-full" — it is a compromised run, which §7.7 already does better.
+
+**A shortened rehearsal is named as one.** It emits `plan.session.partialRaceSimulation`, not `raceSimulation`. Telling an athlete they had completed a race simulation when they covered half the race would misrepresent their readiness on the one session designed to measure it.
+
+The 3km/week beginner now gets a 4-station, 4km part-race simulation, still gated on three completed compromised runs.
+
 ---
 
 # Part 2 — Findings register
@@ -227,7 +239,7 @@ Sizing happens in two passes, because the run/strength split depends on how much
 
 | # | Sev | Finding | Resolution |
 |---|---|---|---|
-| **F34** | P1 | **A full race simulation can exceed a low-volume athlete's entire weekly running budget.** A simulation is 8km of running on its own. An athlete whose Race-Specific budget is below that — a beginner who started around 4km/week, say — would breach guardrail 1 from the simulation alone, with nothing left to displace. | **Handled conservatively:** the simulation is skipped when the week's budget cannot cover it, and the hybrid stays a compromised run. Their gate and fallback still deliver transition practice. **Better fix deferred:** §7.2 says "full *or near-full* simulations", so a scaled rehearsal (4 stations + 4km) would serve these athletes better than none. Worth revisiting at the step-7 snapshot review. |
+| **F34** | ~~**A full race simulation can exceed a low-volume athlete's entire weekly running budget.** A simulation is 8km of running on its own. An athlete whose Race-Specific budget is below that — a beginner who started around 4km/week, say — would breach guardrail 1 from the simulation alone, with nothing left to displace.~~ | **RESOLVED by R10 — approved 2026-08-06.** The deferred fix is now the implemented one: simulations scale to the budget, down to a four-station floor, and a shortened rehearsal is named `partialRaceSimulation` rather than passed off as a full race. |
 | **F35** | ~~**The single-run ceiling now caps weekly volume for high-volume athletes.** Session length is bounded by demonstrated capability (longest run × 1.2), so an athlete's week can only hold `runSlots × thatCap`. The 45 km/week runner in profile 2 is prescribed 32.6 km, because 5 sessions leaves only 2 run slots. Under-prescribing is the safe direction, but it is under-prescribing.~~ | **RESOLVED by R9 — approved 2026-08-06.** The run/strength split is derived from required capacity: strength days convert to run days until the running fits, with strength folding into the hybrid. The 45 km runner now gets 3 × 15 km and their full volume. |
 | **F36** | ~~**A 3-day athlete gets one run a week** in an event that is more than half running. §7.4's 3-day row is 1 run / 1 strength / 1 hybrid, and in Foundation the hybrid carries no running at all — so a beginner runs once a week for eight weeks. Profile 1 peaks around 5.5 km against a race that demands 8 km.~~ | **RESOLVED by R8 — approved 2026-08-06.** 3-day row is now 2 run + 1 hybrid, with strength folded into the hybrid as an accessory block. Also lifted the beginner's peak from ~5.5 to 11.9 km/week. |
 | **F32** | **P1 — wants a coach's eye** | **Race-pace estimation is a modelling assumption with no source.** §7.8 says goal race pace is "estimated from 5km time if provided" but gives no formula, and `research.md` establishes only that coaches use a recent 5–10km trial and that the race demands threshold-adjacent effort for 60–90+ minutes. I implemented `racePace = fiveKPace × 1.15`, chosen so a 25-minute 5k athlete is prescribed ~5:45/km against the ~6:22/km average the lab study reports for an ~86-minute finish. The per-zone multipliers (easy 1.25, Zone 2 1.15, threshold 1.0, hard 0.92) are the same kind of assumption. | **Implemented but unvalidated.** Isolated in named constants in `lib/engine/progression/running.ts` so it is one edit to change. Deliberately errs slow: a pace slightly too easy costs a little time, one too hard is how a first-timer blows up at the sled. **Needs review at the step-7 snapshot read.** |
