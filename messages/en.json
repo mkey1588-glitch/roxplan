@@ -6,6 +6,26 @@
   "plan": {
     "note": {
       "twoDayWeek": "Two sessions a week will build real race readiness. If you can find a third, it's the single biggest step up for a first race — but this plan works as it is."
+    },
+    "zone": {
+      "easy": "Easy — conversational, recovery pace",
+      "zone2": "Zone 2 — steady aerobic base, you could hold a conversation",
+      "threshold": "Threshold — goal race pace, comfortably hard",
+      "hard": "Hard — short intervals only"
+    },
+    "readiness": {
+      "notEnoughTime": "There isn't enough time to build race fitness safely before this date. Trying to would raise your injury risk without meaningfully improving your finish.",
+      "whatThisPlanIs": "So this plan does something different: it gets you familiar with all eight stations, teaches you what running off a station feels like, and gets you to the start line fresh and knowing what to expect.",
+      "pacingGuidance": "Start slower than feels right. The first run is the easiest one you'll do, and going out hard is the most common way a first race unravels.",
+      "raceDayLogistics": "Know the station order, bring your own kit for the farmers carry grip, and walk the venue before you start if you can.",
+      "stationTechnique": "Station technique — all eight, light load",
+      "singleCompromisedRun": "One compromised run — a station, then run",
+      "restBeforeRace": "Full rest",
+      "noSimulations": "No race simulations. A full simulation this close would cost you more in recovery than it gains you in readiness.",
+      "noNewMaximalLoading": "No new maximal loading. This isn't the window to find out what your heaviest sled feels like.",
+      "noVolumeIncrease": "No increase over your current training volume. Holding steady is the goal.",
+      "considerLaterRace": "It's worth asking whether a later race would serve you better. There's no prize for racing this one under-prepared, and a date 12 weeks out would let you arrive genuinely ready.",
+      "considerRelayOrDoubles": "If you'd rather race this date, Relay or Doubles splits the work between you and a partner or team — much less total load, and the same event-day experience."
     }
   }
 }
