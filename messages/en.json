@@ -26,6 +26,49 @@
       "noVolumeIncrease": "No increase over your current training volume. Holding steady is the goal.",
       "considerLaterRace": "It's worth asking whether a later race would serve you better. There's no prize for racing this one under-prepared, and a date 12 weeks out would let you arrive genuinely ready.",
       "considerRelayOrDoubles": "If you'd rather race this date, Relay or Doubles splits the work between you and a partner or team — much less total load, and the same event-day experience."
+    },
+    "session": {
+      "rest": "Rest day",
+      "easyRun": "Easy run",
+      "longRun": "Long run",
+      "intervalRun": "Interval run",
+      "strengthLower": "Strength — lower body",
+      "strengthUpper": "Strength — upper body",
+      "stationSkill": "Station skills",
+      "compromisedRun": "Compromised run",
+      "raceSimulation": "Race simulation",
+      "recovery": "Recovery and mobility"
+    },
+    "block": {
+      "warmup": "Warm-up",
+      "cooldown": "Cool-down",
+      "rest": "Full rest — no training today",
+      "steadyRun": "Steady run",
+      "longRun": "Long run",
+      "intervals": "Intervals",
+      "strengthMain": "Main lifts",
+      "stationSkill": "Station practice",
+      "compromisedRounds": "Rounds — station, then run",
+      "simulation": "Full race simulation",
+      "mobility": "Mobility"
+    },
+    "movement": {
+      "squat": "Squat pattern",
+      "hinge": "Hinge pattern",
+      "lunge": "Lunge pattern",
+      "push": "Push pattern",
+      "pull": "Pull pattern",
+      "carry": "Loaded carry"
+    },
+    "rationale": {
+      "rest": "Rest is when the training you've already done turns into fitness. Taking it is part of the plan, not a gap in it.",
+      "aerobicBase": "Running is more than half the race, and aerobic base is the strongest single predictor of your finish time. Most of your running should feel easy.",
+      "intervalRun": "Repeats at goal race pace teach your legs what that pace feels like, so you can hold it on race day without checking a watch.",
+      "strength": "Strength work is what stops the sled and the carries from wrecking your legs for the runs that follow.",
+      "stationSkill": "Practising the movements while fresh means your technique holds up later, when you're not.",
+      "compromisedRun": "Seven of your eight race runs start on legs that have just finished a station. This is the only session that rehearses that.",
+      "raceSimulation": "A full run-through, so race day is a repeat of something you've already done rather than a first attempt.",
+      "displacedBySimulation": "Lighter today — this week's simulation is the hard session, and stacking more running on top of it would cost you more than it gains."
     }
   }
 }
