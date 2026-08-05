@@ -10,168 +10,166 @@ Guardrails: PASS
 NOTE: equipment is not yet an engine input. Station substitution (§F5) is a
 render-time concern and arrives with the UI, so these plans assume full access.
 
-WEEK  1  FOUNDATION     running   3.8 km   3 sessions
+WEEK  1  FOUNDATION     running   6.8 km   3 sessions
 ------------------------------------------------------------------------------------------------
    Wed 05 Aug   Rest day                
-   Thu 06 Aug   Easy run                3.8 km @ zone 2 (RPE 5-6)
+   Thu 06 Aug   Easy run                3.4 km @ zone 2 (RPE 5-6)
    Fri 07 Aug   Rest day                
-   Sat 08 Aug   Strength — upper body   10 min  ·  4 × 8 — Push pattern, Pull pattern, Loaded carry  ·  5 min
+   Sat 08 Aug   Station skills          3 rounds — Sled Push, Sled Pull, Burpee Broad Jump, Sandbag Lunges  ·  3 × 8 — Pull pattern, Loaded carry
    Sun 09 Aug   Rest day                
-   Mon 10 Aug   Station skills          3 rounds — Sled Push, Sled Pull, Burpee Broad Jump, Sandbag Lunges
+   Mon 10 Aug   Long run                3.4 km @ zone 2 (RPE 5-6)
    Tue 11 Aug   Rest day                
 
-WEEK  2  FOUNDATION     running   4.1 km   3 sessions
+WEEK  2  FOUNDATION     running   7.3 km   3 sessions
 ------------------------------------------------------------------------------------------------
    Wed 12 Aug   Rest day                
-   Thu 13 Aug   Easy run                4.1 km @ zone 2 (RPE 5-6)
+   Thu 13 Aug   Easy run                3.7 km @ zone 2 (RPE 5-6)
    Fri 14 Aug   Rest day                
-   Sat 15 Aug   Strength — lower body   10 min  ·  4 × 8 — Squat pattern, Hinge pattern, Lunge pattern  ·  5 min
+   Sat 15 Aug   Station skills          3 rounds — Sled Pull, Burpee Broad Jump, Sandbag Lunges, Wall Balls  ·  3 × 8 — Squat pattern, Hinge pattern
    Sun 16 Aug   Rest day                
-   Mon 17 Aug   Station skills          3 rounds — Sled Pull, Burpee Broad Jump, Sandbag Lunges, Wall Balls
+   Mon 17 Aug   Long run                3.7 km @ zone 2 (RPE 5-6)
    Tue 18 Aug   Rest day                
 
-WEEK  3  FOUNDATION     running   4.4 km   3 sessions
+WEEK  3  FOUNDATION     running   7.9 km   3 sessions
 ------------------------------------------------------------------------------------------------
    Wed 19 Aug   Rest day                
-   Thu 20 Aug   Easy run                4.4 km @ zone 2 (RPE 5-6)
+   Thu 20 Aug   Easy run                4.0 km @ zone 2 (RPE 5-6)
    Fri 21 Aug   Rest day                
-   Sat 22 Aug   Strength — upper body   10 min  ·  4 × 8 — Push pattern, Pull pattern, Loaded carry  ·  5 min
+   Sat 22 Aug   Station skills          3 rounds — Burpee Broad Jump, Sandbag Lunges, Wall Balls, Sled Push  ·  3 × 8 — Pull pattern, Loaded carry
    Sun 23 Aug   Rest day                
-   Mon 24 Aug   Station skills          3 rounds — Burpee Broad Jump, Sandbag Lunges, Wall Balls, Sled Push
+   Mon 24 Aug   Long run                4.0 km @ zone 2 (RPE 5-6)
    Tue 25 Aug   Rest day                
 
-WEEK  4  FOUNDATION     running   2.6 km   3 sessions  ⟨deload⟩
+WEEK  4  FOUNDATION     running   4.8 km   3 sessions  ⟨deload⟩
 ------------------------------------------------------------------------------------------------
    Wed 26 Aug   Rest day                
-   Thu 27 Aug   Easy run                2.6 km @ zone 2 (RPE 5-6)
+   Thu 27 Aug   Easy run                2.4 km @ zone 2 (RPE 5-6)
    Fri 28 Aug   Rest day                
-   Sat 29 Aug   Strength — lower body   10 min  ·  4 × 8 — Squat pattern, Hinge pattern, Lunge pattern  ·  5 min
+   Sat 29 Aug   Station skills          3 rounds — Sandbag Lunges, Wall Balls, Sled Push, Sled Pull  ·  3 × 8 — Squat pattern, Hinge pattern
    Sun 30 Aug   Rest day                
-   Mon 31 Aug   Station skills          3 rounds — Sandbag Lunges, Wall Balls, Sled Push, Sled Pull
+   Mon 31 Aug   Long run                2.4 km @ zone 2 (RPE 5-6)
    Tue 01 Sep   Rest day                
 
-WEEK  5  FOUNDATION     running   4.8 km   3 sessions
+WEEK  5  FOUNDATION     running   8.6 km   3 sessions
 ------------------------------------------------------------------------------------------------
    Wed 02 Sep   Rest day                
-   Thu 03 Sep   Easy run                4.8 km @ zone 2 (RPE 5-6)
+   Thu 03 Sep   Easy run                4.3 km @ zone 2 (RPE 5-6)
    Fri 04 Sep   Rest day                
-   Sat 05 Sep   Strength — upper body   10 min  ·  4 × 8 — Push pattern, Pull pattern, Loaded carry  ·  5 min
+   Sat 05 Sep   Station skills          3 rounds — Wall Balls, Sled Push, Sled Pull, Burpee Broad Jump  ·  3 × 8 — Pull pattern, Loaded carry
    Sun 06 Sep   Rest day                
-   Mon 07 Sep   Station skills          3 rounds — Wall Balls, Sled Push, Sled Pull, Burpee Broad Jump
+   Mon 07 Sep   Long run                4.3 km @ zone 2 (RPE 5-6)
    Tue 08 Sep   Rest day                
 
-WEEK  6  FOUNDATION     running   5.1 km   3 sessions
+WEEK  6  FOUNDATION     running   9.3 km   3 sessions
 ------------------------------------------------------------------------------------------------
    Wed 09 Sep   Rest day                
-   Thu 10 Sep   Easy run                5.1 km @ zone 2 (RPE 5-6)
+   Thu 10 Sep   Easy run                4.6 km @ zone 2 (RPE 5-6)
    Fri 11 Sep   Rest day                
-   Sat 12 Sep   Strength — lower body   10 min  ·  4 × 8 — Squat pattern, Hinge pattern, Lunge pattern  ·  5 min
+   Sat 12 Sep   Station skills          3 rounds — Sled Push, Sled Pull, Burpee Broad Jump, Sandbag Lunges  ·  3 × 8 — Squat pattern, Hinge pattern
    Sun 13 Sep   Rest day                
-   Mon 14 Sep   Station skills          3 rounds — Sled Push, Sled Pull, Burpee Broad Jump, Sandbag Lunges
+   Mon 14 Sep   Long run                4.6 km @ zone 2 (RPE 5-6)
    Tue 15 Sep   Rest day                
 
-WEEK  7  FOUNDATION     running   5.5 km   3 sessions
+WEEK  7  FOUNDATION     running  10.0 km   3 sessions
 ------------------------------------------------------------------------------------------------
    Wed 16 Sep   Rest day                
-   Thu 17 Sep   Easy run                5.5 km @ zone 2 (RPE 5-6)
+   Thu 17 Sep   Easy run                5.0 km @ zone 2 (RPE 5-6)
    Fri 18 Sep   Rest day                
-   Sat 19 Sep   Strength — upper body   10 min  ·  4 × 8 — Push pattern, Pull pattern, Loaded carry  ·  5 min
+   Sat 19 Sep   Station skills          3 rounds — Sled Pull, Burpee Broad Jump, Sandbag Lunges, Wall Balls  ·  3 × 8 — Pull pattern, Loaded carry
    Sun 20 Sep   Rest day                
-   Mon 21 Sep   Station skills          3 rounds — Sled Pull, Burpee Broad Jump, Sandbag Lunges, Wall Balls
+   Mon 21 Sep   Long run                5.0 km @ zone 2 (RPE 5-6)
    Tue 22 Sep   Rest day                
 
-WEEK  8  FOUNDATION     running   3.3 km   3 sessions  ⟨deload⟩
+WEEK  8  FOUNDATION     running   6.0 km   3 sessions  ⟨deload⟩
 ------------------------------------------------------------------------------------------------
    Wed 23 Sep   Rest day                
-   Thu 24 Sep   Easy run                3.3 km @ zone 2 (RPE 5-6)
+   Thu 24 Sep   Easy run                3.0 km @ zone 2 (RPE 5-6)
    Fri 25 Sep   Rest day                
-   Sat 26 Sep   Strength — lower body   10 min  ·  4 × 8 — Squat pattern, Hinge pattern, Lunge pattern  ·  5 min
+   Sat 26 Sep   Station skills          3 rounds — Burpee Broad Jump, Sandbag Lunges, Wall Balls, Sled Push  ·  3 × 8 — Squat pattern, Hinge pattern
    Sun 27 Sep   Rest day                
-   Mon 28 Sep   Station skills          3 rounds — Burpee Broad Jump, Sandbag Lunges, Wall Balls, Sled Push
+   Mon 28 Sep   Long run                3.0 km @ zone 2 (RPE 5-6)
    Tue 29 Sep   Rest day                
 
-WEEK  9  BUILD          running   6.1 km   3 sessions
+WEEK  9  BUILD          running  10.6 km   3 sessions
 ------------------------------------------------------------------------------------------------
    Wed 30 Sep   Rest day                
-   Thu 01 Oct   Easy run                4.9 km @ zone 2 (RPE 5-6)
+   Thu 01 Oct   Easy run                4.7 km @ zone 2 (RPE 5-6)
    Fri 02 Oct   Rest day                
-   Sat 03 Oct   Strength — upper body   10 min  ·  4 × 8 — Push pattern, Pull pattern, Loaded carry  ·  5 min
+   Sat 03 Oct   Compromised run         3 rounds: 1 station → 0.4 km @ threshold (RPE 7-8)  ·  3 × 8 — Pull pattern, Loaded carry
    Sun 04 Oct   Rest day                
-   Mon 05 Oct   Compromised run         3 rounds: 1 station → 0.4 km @ threshold (RPE 7-8)
+   Mon 05 Oct   Long run                4.7 km @ zone 2 (RPE 5-6)
    Tue 06 Oct   Rest day                
 
-WEEK 10  BUILD          running   6.7 km   3 sessions
+WEEK 10  BUILD          running  11.2 km   3 sessions
 ------------------------------------------------------------------------------------------------
    Wed 07 Oct   Rest day                
-   Thu 08 Oct   Interval run            1.3 km @ easy (RPE 3-4)  ·  3 × 1.0 km @ threshold (RPE 7-8), 90s recovery  ·  1.3 km @ easy (RPE 3-4)
-                   [locked until 30 min continuous run — serves easy run meanwhile]
+   Thu 08 Oct   Easy run                5.0 km @ zone 2 (RPE 5-6)
    Fri 09 Oct   Rest day                
-   Sat 10 Oct   Strength — lower body   10 min  ·  4 × 8 — Squat pattern, Hinge pattern, Lunge pattern  ·  5 min
+   Sat 10 Oct   Compromised run         3 rounds: 1 station → 0.4 km @ threshold (RPE 7-8)  ·  3 × 8 — Squat pattern, Hinge pattern
    Sun 11 Oct   Rest day                
-   Mon 12 Oct   Compromised run         3 rounds: 1 station → 0.4 km @ threshold (RPE 7-8)
+   Mon 12 Oct   Long run                5.0 km @ zone 2 (RPE 5-6)
    Tue 13 Oct   Rest day                
 
-WEEK 11  BUILD          running   7.4 km   3 sessions
+WEEK 11  BUILD          running  11.9 km   3 sessions
 ------------------------------------------------------------------------------------------------
    Wed 14 Oct   Rest day                
-   Thu 15 Oct   Easy run                5.0 km @ zone 2 (RPE 5-6)
+   Thu 15 Oct   Easy run                4.8 km @ zone 2 (RPE 5-6)
    Fri 16 Oct   Rest day                
-   Sat 17 Oct   Strength — upper body   10 min  ·  4 × 8 — Push pattern, Pull pattern, Loaded carry  ·  5 min
+   Sat 17 Oct   Compromised run         3 rounds: 1 station → 0.8 km @ threshold (RPE 7-8)  ·  3 × 8 — Pull pattern, Loaded carry
    Sun 18 Oct   Rest day                
-   Mon 19 Oct   Compromised run         3 rounds: 1 station → 0.8 km @ threshold (RPE 7-8)
+   Mon 19 Oct   Long run                4.8 km @ zone 2 (RPE 5-6)
    Tue 20 Oct   Rest day                
 
-WEEK 12  RACE_SPECIFIC  running   8.0 km   3 sessions
+WEEK 12  RACE_SPECIFIC  running  11.9 km   3 sessions
 ------------------------------------------------------------------------------------------------
    Wed 21 Oct   Rest day                
-   Thu 22 Oct   Recovery and mobility   20 min
+   Thu 22 Oct   Easy run                2.0 km @ zone 2 (RPE 5-6)
    Fri 23 Oct   Rest day                
-   Sat 24 Oct   Strength — lower body   10 min  ·  3 × 8 — Squat pattern, Hinge pattern, Lunge pattern  ·  5 min
-   Sun 25 Oct   Rest day                
-   Mon 26 Oct   Race simulation         8 stations + 8.0 km running, race weight
+   Sat 24 Oct   Race simulation         8 stations + 8.0 km running, race weight
                    [locked until 3 compromised runs completed — serves compromised run meanwhile]
+   Sun 25 Oct   Rest day                
+   Mon 26 Oct   Long run                2.0 km @ zone 2 (RPE 5-6)
    Tue 27 Oct   Rest day                
 
-WEEK 13  RACE_SPECIFIC  running   8.8 km   3 sessions
+WEEK 13  RACE_SPECIFIC  running  11.9 km   3 sessions
 ------------------------------------------------------------------------------------------------
    Wed 28 Oct   Rest day                
-   Thu 29 Oct   Easy run                4.8 km @ zone 2 (RPE 5-6)
+   Thu 29 Oct   Easy run                4.0 km @ zone 2 (RPE 5-6)
    Fri 30 Oct   Rest day                
-   Sat 31 Oct   Strength — upper body   10 min  ·  3 × 8 — Push pattern, Pull pattern, Loaded carry  ·  5 min
+   Sat 31 Oct   Compromised run         4 rounds: 2 stations → 1.0 km @ threshold (RPE 7-8), race order  ·  3 × 8 — Pull pattern, Loaded carry
    Sun 01 Nov   Rest day                
-   Mon 02 Nov   Compromised run         4 rounds: 2 stations → 1.0 km @ threshold (RPE 7-8), race order
+   Mon 02 Nov   Long run                4.0 km @ zone 2 (RPE 5-6)
    Tue 03 Nov   Rest day                
 
-WEEK 14  RACE_SPECIFIC  running   9.7 km   3 sessions
+WEEK 14  RACE_SPECIFIC  running  11.9 km   3 sessions
 ------------------------------------------------------------------------------------------------
    Wed 04 Nov   Rest day                
-   Thu 05 Nov   Easy run                1.7 km @ zone 2 (RPE 5-6)
+   Thu 05 Nov   Easy run                2.0 km @ zone 2 (RPE 5-6)
    Fri 06 Nov   Rest day                
-   Sat 07 Nov   Strength — lower body   10 min  ·  3 × 8 — Squat pattern, Hinge pattern, Lunge pattern  ·  5 min
-   Sun 08 Nov   Rest day                
-   Mon 09 Nov   Race simulation         8 stations + 8.0 km running, race weight
+   Sat 07 Nov   Race simulation         8 stations + 8.0 km running, race weight
                    [locked until 3 compromised runs completed — serves compromised run meanwhile]
+   Sun 08 Nov   Rest day                
+   Mon 09 Nov   Long run                2.0 km @ zone 2 (RPE 5-6)
    Tue 10 Nov   Rest day                
 
-WEEK 15  RACE_SPECIFIC  running  10.6 km   3 sessions
+WEEK 15  RACE_SPECIFIC  running  11.9 km   3 sessions
 ------------------------------------------------------------------------------------------------
    Wed 11 Nov   Rest day                
-   Thu 12 Nov   Interval run            1.3 km @ easy (RPE 3-4)  ·  4 × 1.0 km @ threshold (RPE 7-8), 90s recovery  ·  1.3 km @ easy (RPE 3-4)
-                   [locked until 30 min continuous run — serves easy run meanwhile]
+   Thu 12 Nov   Easy run                4.0 km @ zone 2 (RPE 5-6)
    Fri 13 Nov   Rest day                
-   Sat 14 Nov   Strength — upper body   10 min  ·  3 × 8 — Push pattern, Pull pattern, Loaded carry  ·  5 min
+   Sat 14 Nov   Compromised run         4 rounds: 2 stations → 1.0 km @ threshold (RPE 7-8), race order  ·  3 × 8 — Pull pattern, Loaded carry
    Sun 15 Nov   Rest day                
-   Mon 16 Nov   Compromised run         4 rounds: 2 stations → 1.0 km @ threshold (RPE 7-8), race order
+   Mon 16 Nov   Long run                4.0 km @ zone 2 (RPE 5-6)
    Tue 17 Nov   Rest day                
 
-WEEK 16  TAPER          running   5.8 km   3 sessions
+WEEK 16  TAPER          running   6.5 km   3 sessions
 ------------------------------------------------------------------------------------------------
    Wed 18 Nov   Rest day                
-   Thu 19 Nov   Easy run                3.8 km @ zone 2 (RPE 5-6)
+   Thu 19 Nov   Easy run                2.3 km @ zone 2 (RPE 5-6)
    Fri 20 Nov   Rest day                
-   Sat 21 Nov   Strength — lower body   10 min  ·  4 × 8 — Squat pattern, Hinge pattern, Lunge pattern  ·  5 min
+   Sat 21 Nov   Compromised run         2 rounds: 1 station → 1.0 km @ threshold (RPE 7-8), race order  ·  3 × 8 — Squat pattern, Hinge pattern
    Sun 22 Nov   Rest day                
-   Mon 23 Nov   Compromised run         2 rounds: 1 station → 1.0 km @ threshold (RPE 7-8), race order
+   Mon 23 Nov   Easy run                2.3 km @ zone 2 (RPE 5-6)
    Tue 24 Nov   Rest day                
 
-TOTAL RUNNING ACROSS PLAN: 96.7 km
+TOTAL RUNNING ACROSS PLAN: 148.5 km

@@ -103,7 +103,13 @@ export class RestDayInvariantError extends Error {
  */
 const BASE_COMPOSITIONS: Readonly<Record<number, Omit<WeeklyComposition, 'rest'>>> = {
   2: { run: 1, strength: 0, hybrid: 1 },
-  3: { run: 1, strength: 1, hybrid: 1 },
+  // **ERRATA F36 / R8.** The PRD's 3-day row was 1 run / 1 strength / 1 hybrid,
+  // which gave an athlete one run a week in an event that is more than half
+  // running — and in Foundation, where the hybrid is station skill work with
+  // no run coupling, that was their *only* running. A second run matters more
+  // than a standalone strength day at this frequency; the strength work is
+  // folded into the hybrid session rather than lost (see `prescribe.ts`).
+  3: { run: 2, strength: 0, hybrid: 1 },
   4: { run: 2, strength: 1, hybrid: 1 },
   5: { run: 2, strength: 2, hybrid: 1 },
   6: { run: 3, strength: 2, hybrid: 1 },

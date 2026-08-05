@@ -207,6 +207,31 @@ export function selectStations(
   return chosen;
 }
 
+/**
+ * A compact strength block appended to a hybrid session (ERRATA R8).
+ *
+ * Shorter than a standalone strength day — it follows other work rather than
+ * opening the session — and alternates lower/upper by week so neither half of
+ * the body is neglected across a plan.
+ */
+function foldedStrengthBlock(order: number, weekIndex: number): SessionBlock {
+  const lower = weekIndex % 2 === 0;
+  return {
+    order,
+    titleKey: 'plan.block.strengthAccessory',
+    prescription: {
+      kind: 'STRENGTH',
+      movementPatternKeys: lower
+        ? ['plan.movement.squat', 'plan.movement.hinge']
+        : ['plan.movement.pull', 'plan.movement.carry'],
+      sets: 3,
+      reps: 8,
+    },
+    targetRpeMin: 6,
+    targetRpeMax: 7,
+  };
+}
+
 function strengthBlocks(type: SessionType, phase: PhaseType): readonly SessionBlock[] {
   // Race-Specific cuts general strength volume while retaining short heavy
   // work (§7.2), so sets drop rather than the session disappearing.
@@ -299,6 +324,16 @@ export function prescribeWeek(input: WeekPrescriptionInput): readonly PlannedSes
   const weeksInPhase = span.endWeek - span.startWeek + 1;
 
   const template = templateFor(sessionsPerWeek, phase, background);
+
+  /**
+   * At 2 and 3 sessions a week there is no room for a standalone strength day
+   * once running is given the frequency it needs (ERRATA R8). The strength
+   * work is appended to the hybrid session instead of being dropped: sleds,
+   * carries and lunges are strength-endurance, and an athlete who never loads
+   * them arrives at the race unable to hold form on four of the eight
+   * stations.
+   */
+  const foldStrengthIntoHybrid = template.composition.strength === 0;
   const { firstDayOffset } = dayOffsetsForWeek(weekIndex);
 
   // --- Hybrid work first, so it gets its metres before anything else. ---
@@ -521,6 +556,7 @@ export function prescribeWeek(input: WeekPrescriptionInput): readonly PlannedSes
             targetRpeMin: 5,
             targetRpeMax: 6,
           },
+          ...(foldStrengthIntoHybrid ? [foldedStrengthBlock(2, weekIndex)] : []),
         ],
         gate: null,
       });
@@ -553,6 +589,7 @@ export function prescribeWeek(input: WeekPrescriptionInput): readonly PlannedSes
           targetRpeMin: zoneSpec(compromised.zone).rpeMin,
           targetRpeMax: zoneSpec(compromised.zone).rpeMax,
         },
+        ...(foldStrengthIntoHybrid ? [foldedStrengthBlock(2, weekIndex)] : []),
       ],
       gate: null,
     });

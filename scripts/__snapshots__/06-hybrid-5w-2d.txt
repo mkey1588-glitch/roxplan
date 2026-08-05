@@ -17,7 +17,7 @@ WEEK  1  FOUNDATION     running   7.7 km   2 sessions
    Fri 07 Aug   Rest day                
    Sat 08 Aug   Rest day                
    Sun 09 Aug   Rest day                
-   Mon 10 Aug   Station skills          3 rounds — Sled Push, Sled Pull, Burpee Broad Jump, Sandbag Lunges
+   Mon 10 Aug   Station skills          3 rounds — Sled Push, Sled Pull, Burpee Broad Jump, Sandbag Lunges  ·  3 × 8 — Pull pattern, Loaded carry
    Tue 11 Aug   Rest day                
 
 WEEK  2  FOUNDATION     running   8.3 km   2 sessions
@@ -27,7 +27,7 @@ WEEK  2  FOUNDATION     running   8.3 km   2 sessions
    Fri 14 Aug   Rest day                
    Sat 15 Aug   Rest day                
    Sun 16 Aug   Rest day                
-   Mon 17 Aug   Station skills          3 rounds — Sled Pull, Burpee Broad Jump, Sandbag Lunges, Wall Balls
+   Mon 17 Aug   Station skills          3 rounds — Sled Pull, Burpee Broad Jump, Sandbag Lunges, Wall Balls  ·  3 × 8 — Squat pattern, Hinge pattern
    Tue 18 Aug   Rest day                
 
 WEEK  3  BUILD          running   9.2 km   2 sessions
@@ -37,7 +37,7 @@ WEEK  3  BUILD          running   9.2 km   2 sessions
    Fri 21 Aug   Rest day                
    Sat 22 Aug   Rest day                
    Sun 23 Aug   Rest day                
-   Mon 24 Aug   Compromised run         3 rounds: 1 station → 0.4 km @ threshold (RPE 7-8)
+   Mon 24 Aug   Compromised run         3 rounds: 1 station → 0.4 km @ threshold (RPE 7-8)  ·  3 × 8 — Pull pattern, Loaded carry
    Tue 25 Aug   Rest day                
 
 WEEK  4  RACE_SPECIFIC  running  10.1 km   2 sessions
@@ -47,7 +47,7 @@ WEEK  4  RACE_SPECIFIC  running  10.1 km   2 sessions
    Fri 28 Aug   Rest day                
    Sat 29 Aug   Rest day                
    Sun 30 Aug   Rest day                
-   Mon 31 Aug   Compromised run         4 rounds: 2 stations → 1.0 km @ threshold (RPE 7-8)
+   Mon 31 Aug   Compromised run         4 rounds: 2 stations → 1.0 km @ threshold (RPE 7-8)  ·  3 × 8 — Squat pattern, Hinge pattern
    Tue 01 Sep   Rest day                
 
 WEEK  5  TAPER          running   9.4 km   2 sessions
@@ -57,7 +57,7 @@ WEEK  5  TAPER          running   9.4 km   2 sessions
    Fri 04 Sep   Rest day                
    Sat 05 Sep   Rest day                
    Sun 06 Sep   Rest day                
-   Mon 07 Sep   Compromised run         2 rounds: 1 station → 1.0 km @ threshold (RPE 7-8), race order
+   Mon 07 Sep   Compromised run         2 rounds: 1 station → 1.0 km @ threshold (RPE 7-8), race order  ·  3 × 8 — Pull pattern, Loaded carry
    Tue 08 Sep   Rest day                
 
 TOTAL RUNNING ACROSS PLAN: 44.7 km

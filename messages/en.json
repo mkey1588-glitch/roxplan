@@ -50,7 +50,8 @@
       "stationSkill": "Station practice",
       "compromisedRounds": "Rounds — station, then run",
       "simulation": "Full race simulation",
-      "mobility": "Mobility"
+      "mobility": "Mobility",
+      "strengthAccessory": "Strength — after the main work"
     },
     "movement": {
       "squat": "Squat pattern",

@@ -90,7 +90,7 @@ describe('composition invariants across every combination', () => {
 describe('base templates (PRD §7.4)', () => {
   it.each([
     [2, { run: 1, strength: 0, hybrid: 1, rest: 5 }],
-    [3, { run: 1, strength: 1, hybrid: 1, rest: 4 }],
+    [3, { run: 2, strength: 0, hybrid: 1, rest: 4 }],
     [4, { run: 2, strength: 1, hybrid: 1, rest: 3 }],
     [5, { run: 2, strength: 2, hybrid: 1, rest: 2 }],
     [6, { run: 3, strength: 2, hybrid: 1, rest: 1 }],
@@ -128,6 +128,28 @@ describe('base templates (PRD §7.4)', () => {
     for (const sessionsPerWeek of [3, 4, 5, 6]) {
       expect(templateFor(sessionsPerWeek, 'FOUNDATION', 'HYBRID').noteKeys).toEqual([]);
     }
+  });
+});
+
+describe('running frequency (ERRATA F36 / R8)', () => {
+  it('gives every athlete training 3+ days at least two runs a week', () => {
+    // Running is more than half the race. One run a week is not a HYROX plan,
+    // and in Foundation the hybrid carries no running at all, so a 3-day
+    // athlete previously ran once a fortnight's worth of sessions.
+    for (const sessionsPerWeek of [3, 4, 5, 6]) {
+      for (const phase of PHASE_TYPES) {
+        for (const background of ATHLETIC_BACKGROUNDS) {
+          expect(
+            compositionFor(sessionsPerWeek, phase, background).run,
+            `${sessionsPerWeek}d/${phase}/${background}`,
+          ).toBeGreaterThanOrEqual(2);
+        }
+      }
+    }
+  });
+
+  it('leaves the 2-day week at one run, where there is no room for more', () => {
+    expect(compositionFor(2, 'FOUNDATION', 'HYBRID').run).toBe(1);
   });
 });
 
