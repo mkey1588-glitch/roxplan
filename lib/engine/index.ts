@@ -6,10 +6,16 @@ import { deriveRaceCalendar, deriveRollingCalendar } from './calendar';
 import { assertSupportedDivision } from './errors';
 import { compromisedRunThreshold } from './gates';
 import type { ValidatablePlan } from './guardrails';
-import { allocatePhases, hasSufficientRunway } from './phases';
+import { allocatePhases, allocateRollingPhases, hasSufficientRunway } from './phases';
 import type { PlannedSession } from './prescribe';
 import { prescribeWeek, weeklyRunningMetres } from './prescribe';
-import { ceilingFactorFor, planWeeklyVolume, ROLLING_MAX_WEEKS } from './progression/volume';
+import { maxSingleRunMetres } from './progression/running';
+import {
+  ceilingFactorFor,
+  DELOAD_VOLUME_FACTOR,
+  planWeeklyVolume,
+  ROLLING_MAX_WEEKS,
+} from './progression/volume';
 import type { WeeklyVolume } from './progression/volume';
 import type { ReadinessPlan } from './runway';
 import { generateReadinessPlan } from './runway';
@@ -88,13 +94,17 @@ export function generatePlan(input: GeneratePlanInput): GeneratedPlan {
   }
 
   const weeks = calendar.weeks;
-  const allocation = allocatePhases(weeks, input.background);
+  const hasRaceDate = calendar.raceDate !== null;
+  const allocation = hasRaceDate
+    ? allocatePhases(weeks, input.background)
+    : allocateRollingPhases(weeks);
   const volumes = planWeeklyVolume({
     weeks,
     allocation,
     background: input.background,
     currentWeeklyRunM: input.currentWeeklyRunM,
     baselineConfidence: input.baselineConfidence,
+    hasRaceDate,
   });
 
   const ceilingFactor = ceilingFactorFor(input.background);
@@ -104,6 +114,12 @@ export function generatePlan(input: GeneratePlanInput): GeneratedPlan {
   const hybridsBeforeRaceSpecific =
     allocation.FOUNDATION + allocation.BUILD > 0 ? allocation.BUILD : 0;
   const simulationGateThreshold = compromisedRunThreshold(hybridsBeforeRaceSpecific);
+  // Capability at onboarding. Held static across a 16-week plan this would
+  // mean the athlete's longest run never grows — a periodized plan whose
+  // sessions never progress. It scales with the weekly budget instead, so
+  // session length and weekly volume advance together under the same ceiling.
+  const baseMaxSingleRunM = maxSingleRunMetres(input.longestRunMins);
+  const firstBudgetM = volumes[0]?.runningBudgetM ?? 1;
 
   const sessionsByWeek: (readonly PlannedSession[])[] = [];
   /**
@@ -119,10 +135,18 @@ export function generatePlan(input: GeneratePlanInput): GeneratedPlan {
   const measured: number[] = [];
 
   for (const volume of volumes) {
+    // A deload has to cut what the athlete is *actually* doing. Once the
+    // single-run ceiling binds, measured volume sits below budget, and a
+    // deload expressed as a share of budget produces no drop at all — the
+    // recovery week silently stops happening.
+    const recentMax = rollingMax(measured);
     const ceilingM =
       measured.length === 0
         ? volume.runningBudgetM
-        : Math.floor(rollingMax(measured) * ceilingFactor);
+        : Math.floor(recentMax * (volume.isDeload ? DELOAD_VOLUME_FACTOR : ceilingFactor));
+
+    const budgetGrowth = Math.max(1, volume.runningBudgetM / firstBudgetM);
+    const maxSingleRunM = Math.round(baseMaxSingleRunM * budgetGrowth);
 
     const sessions = prescribeWeek({
       weekIndex: volume.weekIndex,
@@ -133,6 +157,7 @@ export function generatePlan(input: GeneratePlanInput): GeneratedPlan {
       totalWeeks: weeks,
       weakestStations: input.weakestStations,
       simulationGateThreshold,
+      maxSingleRunM,
     });
 
     sessionsByWeek.push(sessions);

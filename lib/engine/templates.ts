@@ -152,7 +152,10 @@ export function compositionFor(
   // instead: a run becomes a strength session. A runner's gap is
   // strength-endurance, not aerobic volume, so trading is the intent anyway.
   // No-op at 2 and 3 days a week, where only one run exists to trade.
-  if (background === 'RUNNER' && phase === 'FOUNDATION' && run >= 2) {
+  // Requires three runs, not two: trading down to a single run a week for
+  // someone whose whole background is running is not what §7.3 means, and
+  // it forces the week's entire running volume into one session.
+  if (background === 'RUNNER' && phase === 'FOUNDATION' && run >= 3) {
     run -= 1;
     strength += 1;
   }

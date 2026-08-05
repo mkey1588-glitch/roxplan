@@ -184,26 +184,58 @@ function checkSessionCountRamp(plan: ValidatablePlan): GuardrailViolation[] {
 
 // --- Rule 3: deload cadence and suppression ---
 
+function simulationMetresIn(week: readonly PlannedSession[]): number {
+  let total = 0;
+  for (const session of week) {
+    for (const block of session.blocks) {
+      if (block.prescription.kind === 'SIMULATION') total += block.prescription.runDistanceM;
+    }
+  }
+  return total;
+}
+
 function checkDeloadCadence(plan: ValidatablePlan): GuardrailViolation[] {
   const violations: GuardrailViolation[] = [];
-  const metres = plan.sessionsByWeek.map(weeklyMetres);
   const totalWeeks = plan.sessionsByWeek.length;
 
-  for (let index = 1; index < metres.length; index += 1) {
+  /**
+   * Deload detection compares ordinary weeks with ordinary weeks.
+   *
+   * A simulation is a discrete 8km rehearsal that dominates whatever week it
+   * lands in, so mixing simulation weeks into the comparison is wrong in both
+   * directions: include their metres and every following week looks like a
+   * 25% cut, exclude their metres and the simulation week itself looks like a
+   * collapse. Simulation weeks are therefore skipped and excluded from the
+   * baseline — §7.2 says Race-Specific manages its load through simulation
+   * spacing, which is exactly this. The volume ceiling still counts every
+   * metre (R2); only this comparison sets them aside.
+   */
+  const weekly = plan.sessionsByWeek.map((week) => ({
+    metres: weeklyMetres(week),
+    hasSimulation: week.some((session) => session.type === 'RACE_SIMULATION'),
+  }));
+
+  for (let index = 1; index < weekly.length; index += 1) {
     const weekIndex = index + 1;
     const week = plan.sessionsByWeek[index];
-    if (week === undefined) continue;
-    const phase = phaseOf(week);
+    const current = weekly[index];
+    if (week === undefined || current === undefined) continue;
 
     // The taper is a deliberate cut, not a deload, so it is exempt.
+    const phase = phaseOf(week);
     if (phase === 'TAPER') continue;
+    if (current.hasSimulation) continue;
 
-    const window = metres.slice(Math.max(0, index - ROLLING_WINDOW), index);
-    const rollingMax = Math.max(...window);
+    const window = weekly
+      .slice(0, index)
+      .filter((entry) => !entry.hasSimulation)
+      .slice(-ROLLING_WINDOW);
+    if (window.length === 0) continue;
+
+    const rollingMax = Math.max(...window.map((entry) => entry.metres));
     if (rollingMax <= 0) continue;
 
-    const current = metres[index] ?? 0;
-    const looksLikeDeload = current <= rollingMax * DELOAD_DETECTION_THRESHOLD;
+    const looksLikeDeload = current.metres <= rollingMax * DELOAD_DETECTION_THRESHOLD;
     const weeksRemaining = totalWeeks - weekIndex;
 
     if (looksLikeDeload) {
@@ -213,22 +245,22 @@ function checkDeloadCadence(plan: ValidatablePlan): GuardrailViolation[] {
           rule: 'DELOAD_CADENCE',
           messageKey: 'guardrail.deloadInRaceSpecific',
           weekIndex,
-          detail: { plannedM: current, rollingMaxM: rollingMax },
+          detail: { plannedM: current.metres, rollingMaxM: rollingMax },
         });
-      } else if (weeksRemaining <= DELOAD_SUPPRESSION_WEEKS) {
+      } else if (plan.weeksToRace !== null && weeksRemaining <= DELOAD_SUPPRESSION_WEEKS) {
         // This is the v0.1 bug: a deload beside the taper gives two easy
         // weeks back to back before race day.
         violations.push({
           rule: 'DELOAD_CADENCE',
           messageKey: 'guardrail.deloadNearRace',
           weekIndex,
-          detail: { plannedM: current, rollingMaxM: rollingMax, weeksRemaining },
+          detail: { plannedM: current.metres, rollingMaxM: rollingMax, weeksRemaining },
         });
       }
     } else if (
       weekIndex % DELOAD_EVERY === 0 &&
       phase !== 'RACE_SPECIFIC' &&
-      weeksRemaining > DELOAD_SUPPRESSION_WEEKS
+      (plan.weeksToRace === null || weeksRemaining > DELOAD_SUPPRESSION_WEEKS)
     ) {
       // The cadence is a requirement, not just a permission: an unsuppressed
       // 4th week that never drops means the athlete never unloads.
@@ -236,7 +268,7 @@ function checkDeloadCadence(plan: ValidatablePlan): GuardrailViolation[] {
         rule: 'DELOAD_CADENCE',
         messageKey: 'guardrail.deloadMissing',
         weekIndex,
-        detail: { plannedM: current, rollingMaxM: rollingMax },
+        detail: { plannedM: current.metres, rollingMaxM: rollingMax },
       });
     }
   }

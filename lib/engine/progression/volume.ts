@@ -84,6 +84,8 @@ export interface VolumePlanInput {
   readonly currentWeeklyRunM: number;
   /** D2: LOW for a self-reported baseline. */
   readonly baselineConfidence: 'HIGH' | 'LOW';
+  /** False for a rolling block (D4); changes deload suppression. */
+  readonly hasRaceDate?: boolean;
 }
 
 /** The ceiling multiplier for a background (guardrail 1). */
@@ -102,10 +104,14 @@ export function isDeloadWeek(
   weekIndex: number,
   phase: PhaseType,
   totalWeeks: number,
+  hasRaceDate = true,
 ): boolean {
   if (weekIndex % DELOAD_INTERVAL_WEEKS !== 0) return false;
   if (phase === 'RACE_SPECIFIC' || phase === 'TAPER') return false;
-  if (totalWeeks - weekIndex <= DELOAD_SUPPRESSION_WEEKS) return false;
+  // The proximity window protects the run-in to a race. A rolling block has
+  // no race, and applying it there would suppress every deload in a 4-week
+  // cycle — leaving an athlete who never unloads at all (D4, ERRATA F23).
+  if (hasRaceDate && totalWeeks - weekIndex <= DELOAD_SUPPRESSION_WEEKS) return false;
   return true;
 }
 
@@ -124,6 +130,7 @@ function rollingMax(history: readonly number[]): number {
  */
 export function planWeeklyVolume(input: VolumePlanInput): readonly WeeklyVolume[] {
   const { weeks, allocation, background, currentWeeklyRunM, baselineConfidence } = input;
+  const hasRaceDate = input.hasRaceDate ?? true;
 
   if (!Number.isInteger(weeks) || weeks < 1) {
     throw new RangeError(`weeks must be a positive integer, received ${weeks}.`);
@@ -142,7 +149,7 @@ export function planWeeklyVolume(input: VolumePlanInput): readonly WeeklyVolume[
     const phase = phaseForWeek(allocation, weekIndex);
     if (phase === null) throw new Error(`Week ${weekIndex} falls outside the phase allocation.`);
 
-    const deload = isDeloadWeek(weekIndex, phase, weeks);
+    const deload = isDeloadWeek(weekIndex, phase, weeks, hasRaceDate);
 
     let budgetM: number;
     let ceilingM: number;

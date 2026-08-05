@@ -202,6 +202,36 @@ export function allocatePhases(
 }
 
 /**
+ * Allocates phases for a rolling block with no race date (D4, ERRATA F23).
+ *
+ * A rolling block has nothing to peak for, so it carries no Race-Specific
+ * phase and no taper — tapering toward a race that does not exist would be
+ * meaningless, and "plans never expire" (D4) means these cycles simply repeat.
+ * D4 calls them "Foundation → Build cycles", so the block contains both, split
+ * evenly with the odd week going to Foundation.
+ */
+export function allocateRollingPhases(weeks: number): PhaseAllocation {
+  if (!Number.isInteger(weeks) || weeks < 2) {
+    throw new RangeError(
+      `A rolling block needs at least 2 whole weeks to hold both phases, received ${weeks}.`,
+    );
+  }
+
+  const foundation = Math.ceil(weeks / 2);
+  const allocation: PhaseAllocation = Object.freeze({
+    FOUNDATION: foundation,
+    BUILD: weeks - foundation,
+    RACE_SPECIFIC: 0,
+    TAPER: 0,
+  });
+
+  const sum = PHASE_TYPES.reduce((total, phase) => total + allocation[phase], 0);
+  if (sum !== weeks) throw new PhaseAllocationInvariantError(allocation, weeks);
+
+  return allocation;
+}
+
+/**
  * Expands an allocation into 1-based, inclusive week spans in phase order.
  *
  * Zero-week phases are omitted, though the minimums mean none should occur.

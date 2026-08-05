@@ -93,6 +93,13 @@ export interface WeekPrescriptionInput {
   readonly weakestStations: readonly StationId[];
   /** Threshold for the simulation gate, from `compromisedRunThreshold` (F15). */
   readonly simulationGateThreshold: number;
+  /**
+   * Longest single run this athlete may be prescribed, from
+   * `maxSingleRunMetres`. The weekly ceiling constrains total volume but says
+   * nothing about how it is split; without this the whole week lands in one
+   * session.
+   */
+  readonly maxSingleRunM: number;
 }
 
 function spanFor(spans: readonly PhaseSpan[], phase: PhaseType): PhaseSpan {
@@ -282,6 +289,7 @@ export function prescribeWeek(input: WeekPrescriptionInput): readonly PlannedSes
     totalWeeks,
     weakestStations,
     simulationGateThreshold,
+    maxSingleRunM,
   } = input;
 
   const phase = volume.phase;
@@ -348,7 +356,7 @@ export function prescribeWeek(input: WeekPrescriptionInput): readonly PlannedSes
   // share, because neither prescribes intervals.
   const wantsIntervals = phase === 'BUILD' || phase === 'RACE_SPECIFIC';
   const intervalReps = wantsIntervals
-    ? affordableIntervalReps(runBudget, runPositions.length)
+    ? affordableIntervalReps(Math.min(runBudget, maxSingleRunM), runPositions.length)
     : 0;
   let intervalMetres = intervalReps > 0 ? INTERVAL_FIXED_M + intervalReps * 1000 : 0;
 
@@ -365,11 +373,15 @@ export function prescribeWeek(input: WeekPrescriptionInput): readonly PlannedSes
   // unspent it reads to the validator as an unplanned mid-phase deload — the
   // repeat cap binds hardest for athletes with only one run slot in the week.
   if (intervalReps > 0 && steadyRuns === 0 && steadyBudget > 0) {
-    intervalMetres = runBudget;
+    intervalMetres = Math.min(runBudget, maxSingleRunM);
     steadyBudget = 0;
   }
 
-  const perRunM = steadyRuns > 0 ? Math.round(steadyBudget / steadyRuns) : 0;
+  // Volume the athlete cannot yet absorb in one session is simply not
+  // prescribed. Leaving it unspent is the safe failure: it shows up as a
+  // lower weekly total, which the next week then ramps from honestly.
+  const perRunM =
+    steadyRuns > 0 ? Math.min(Math.round(steadyBudget / steadyRuns), maxSingleRunM) : 0;
   const runsToPrescribe = steadyRuns + (intervalReps > 0 ? 1 : 0);
 
   const sessions: PlannedSession[] = [];
@@ -394,7 +406,13 @@ export function prescribeWeek(input: WeekPrescriptionInput): readonly PlannedSes
     }
 
     if (slot === 'STRENGTH') {
-      const type: SessionType = strengthIndex % 2 === 0 ? 'STRENGTH_LOWER' : 'STRENGTH_UPPER';
+      // Alternates across weeks, not just within one. Keying on the slot
+      // index alone meant any athlete with a single strength session a week
+      // trained lower body every week for the whole plan and never once
+      // trained the pull, press and grip that the SkiErg, sled pull, farmers
+      // carry and wall balls all demand.
+      const type: SessionType =
+        (weekIndex + strengthIndex) % 2 === 0 ? 'STRENGTH_LOWER' : 'STRENGTH_UPPER';
       strengthIndex += 1;
       sessions.push({
         ...base,

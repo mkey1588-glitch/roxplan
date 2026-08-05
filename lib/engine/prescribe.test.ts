@@ -47,6 +47,7 @@ function prescribePlan(
       totalWeeks: weeks,
       weakestStations: WEAKEST,
       simulationGateThreshold: compromisedRunThreshold(3),
+      maxSingleRunM: 25000,
     }),
   ]);
 }
@@ -129,6 +130,7 @@ describe('running budget is respected (ERRATA R2)', () => {
             totalWeeks: 16,
             weakestStations: WEAKEST,
             simulationGateThreshold: compromisedRunThreshold(3),
+            maxSingleRunM: 25000,
           });
 
           // Tight: the interval session's fixed warm-up and cool-down are

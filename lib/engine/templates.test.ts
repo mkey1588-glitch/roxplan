@@ -158,8 +158,8 @@ describe('the 6-day template (ERRATA F08)', () => {
 
 describe('RUNNER modifier (PRD §7.3, ERRATA F09)', () => {
   it('substitutes a run for a strength session rather than adding one', () => {
-    const hybrid = compositionFor(5, 'FOUNDATION', 'HYBRID');
-    const runner = compositionFor(5, 'FOUNDATION', 'RUNNER');
+    const hybrid = compositionFor(6, 'FOUNDATION', 'HYBRID');
+    const runner = compositionFor(6, 'FOUNDATION', 'RUNNER');
 
     expect(trainingDays(runner)).toBe(trainingDays(hybrid));
     expect(runner.strength).toBe(hybrid.strength + 1);
@@ -179,8 +179,8 @@ describe('RUNNER modifier (PRD §7.3, ERRATA F09)', () => {
 
   it('applies in Foundation only', () => {
     for (const phase of PHASE_TYPES) {
-      const runner = compositionFor(4, phase, 'RUNNER');
-      const hybrid = compositionFor(4, phase, 'HYBRID');
+      const runner = compositionFor(6, phase, 'RUNNER');
+      const hybrid = compositionFor(6, phase, 'HYBRID');
       if (phase === 'FOUNDATION') {
         expect(runner).not.toEqual(hybrid);
       } else {
@@ -189,8 +189,18 @@ describe('RUNNER modifier (PRD §7.3, ERRATA F09)', () => {
     }
   });
 
-  it('is a no-op at 2 and 3 days, where only one run exists to trade', () => {
-    for (const sessionsPerWeek of [2, 3]) {
+  it('leaves at least two runs, so a runner never trains on one run a week', () => {
+    // Trading down to a single run for someone whose background is running
+    // also forces the week's entire volume into one session.
+    for (const sessionsPerWeek of [2, 3, 4, 5, 6]) {
+      const hybrid = compositionFor(sessionsPerWeek, 'FOUNDATION', 'HYBRID');
+      const runner = compositionFor(sessionsPerWeek, 'FOUNDATION', 'RUNNER');
+      expect(runner.run).toBeGreaterThanOrEqual(Math.min(2, hybrid.run));
+    }
+  });
+
+  it('is a no-op below 3 runs a week, where there is nothing safe to trade', () => {
+    for (const sessionsPerWeek of [2, 3, 4, 5]) {
       expect(compositionFor(sessionsPerWeek, 'FOUNDATION', 'RUNNER')).toEqual(
         compositionFor(sessionsPerWeek, 'FOUNDATION', 'HYBRID'),
       );

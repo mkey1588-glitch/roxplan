@@ -1,0 +1,63 @@
+================================================================================================
+PROFILE 6 — HYBRID · 5 weeks · 2 days/week · minimum viable
+================================================================================================
+HYBRID · 2 sessions/week · OPEN_SINGLES · baseline HIGH
+5 weeks · starts 2026-08-05 · races 2026-09-08 · 0 lead-in day(s)
+Phases: FOUNDATION 1-2 · BUILD 3-3 · RACE_SPECIFIC 4-4 · TAPER 5-5
+Current weekly running: 15.0 km · longest run 45 min
+Guardrails: PASS
+
+NOTE: equipment is not yet an engine input. Station substitution (§F5) is a
+render-time concern and arrives with the UI, so these plans assume full access.
+
+WEEK  1  FOUNDATION     running   7.7 km   2 sessions
+------------------------------------------------------------------------------------------------
+   Wed 05 Aug   Rest day                
+   Thu 06 Aug   Easy run                7.7 km @ zone 2 (RPE 5-6)
+   Fri 07 Aug   Rest day                
+   Sat 08 Aug   Rest day                
+   Sun 09 Aug   Rest day                
+   Mon 10 Aug   Station skills          3 rounds — Sled Push, Sled Pull, Burpee Broad Jump, Sandbag Lunges
+   Tue 11 Aug   Rest day                
+
+WEEK  2  FOUNDATION     running   8.3 km   2 sessions
+------------------------------------------------------------------------------------------------
+   Wed 12 Aug   Rest day                
+   Thu 13 Aug   Easy run                8.3 km @ zone 2 (RPE 5-6)
+   Fri 14 Aug   Rest day                
+   Sat 15 Aug   Rest day                
+   Sun 16 Aug   Rest day                
+   Mon 17 Aug   Station skills          3 rounds — Sled Pull, Burpee Broad Jump, Sandbag Lunges, Wall Balls
+   Tue 18 Aug   Rest day                
+
+WEEK  3  BUILD          running   9.2 km   2 sessions
+------------------------------------------------------------------------------------------------
+   Wed 19 Aug   Rest day                
+   Thu 20 Aug   Interval run            1.5 km @ easy (RPE 3-4)  ·  5 × 1.0 km @ threshold (RPE 7-8), 90s recovery  ·  1.5 km @ easy (RPE 3-4)
+   Fri 21 Aug   Rest day                
+   Sat 22 Aug   Rest day                
+   Sun 23 Aug   Rest day                
+   Mon 24 Aug   Compromised run         3 rounds: 1 station → 0.4 km @ threshold (RPE 7-8)
+   Tue 25 Aug   Rest day                
+
+WEEK  4  RACE_SPECIFIC  running  10.1 km   2 sessions
+------------------------------------------------------------------------------------------------
+   Wed 26 Aug   Rest day                
+   Thu 27 Aug   Interval run            1.0 km @ easy (RPE 3-4)  ·  4 × 1.0 km @ threshold (RPE 7-8), 90s recovery  ·  1.0 km @ easy (RPE 3-4)
+   Fri 28 Aug   Rest day                
+   Sat 29 Aug   Rest day                
+   Sun 30 Aug   Rest day                
+   Mon 31 Aug   Compromised run         4 rounds: 2 stations → 1.0 km @ threshold (RPE 7-8)
+   Tue 01 Sep   Rest day                
+
+WEEK  5  TAPER          running   9.4 km   2 sessions
+------------------------------------------------------------------------------------------------
+   Wed 02 Sep   Rest day                
+   Thu 03 Sep   Easy run                7.4 km @ zone 2 (RPE 5-6)
+   Fri 04 Sep   Rest day                
+   Sat 05 Sep   Rest day                
+   Sun 06 Sep   Rest day                
+   Mon 07 Sep   Compromised run         2 rounds: 1 station → 1.0 km @ threshold (RPE 7-8), race order
+   Tue 08 Sep   Rest day                
+
+TOTAL RUNNING ACROSS PLAN: 44.7 km

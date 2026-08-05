@@ -125,3 +125,44 @@ export function paceForZoneSecsPerKm(
  * finishing time.
  */
 export const BASE_ZONE: IntensityZone = 'ZONE_2';
+
+/**
+ * Fallback easy pace when no 5km time is available, in seconds per kilometre.
+ *
+ * Another modelling assumption (ERRATA F32 family). 7:00/km is a conservative
+ * conversational pace for a general-public athlete; erring slow means the
+ * capability ceiling below comes out shorter rather than longer.
+ */
+export const DEFAULT_EASY_PACE_SECS_PER_KM = 420;
+
+/**
+ * How much longer than their longest run an athlete may be asked to go.
+ *
+ * Session length has to progress like everything else. The weekly volume
+ * ceiling says nothing about how that volume is split, so without this a week
+ * of 8km with one run slot becomes a single 8km run for someone whose longest
+ * is 22 minutes — well over double, and precisely the "too-rapid increase"
+ * the research names as the main controllable injury risk.
+ */
+export const SINGLE_RUN_PROGRESSION_FACTOR = 1.2;
+
+/**
+ * The longest single run this athlete may be prescribed, in metres.
+ *
+ * Derived from demonstrated capability in *duration*, then converted to
+ * distance. Duration is the honest unit here: a beginner's 22 minutes is a
+ * fact about them, whereas the equivalent distance depends on their pace.
+ */
+export function maxSingleRunMetres(
+  longestRunMins: number,
+  paceSecsPerKm: number = DEFAULT_EASY_PACE_SECS_PER_KM,
+): number {
+  if (!Number.isFinite(longestRunMins) || longestRunMins < 0) {
+    throw new RangeError(`longestRunMins must be non-negative, received ${longestRunMins}.`);
+  }
+  if (!Number.isFinite(paceSecsPerKm) || paceSecsPerKm <= 0) {
+    throw new RangeError(`paceSecsPerKm must be positive, received ${paceSecsPerKm}.`);
+  }
+  const secs = longestRunMins * 60 * SINGLE_RUN_PROGRESSION_FACTOR;
+  return Math.round((secs / paceSecsPerKm) * 1000);
+}
